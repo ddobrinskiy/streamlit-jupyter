@@ -4,29 +4,39 @@
 __all__ = ['IN_IPYTHON', 'tqdm', 'StreamlitPatcher']
 
 # %% ../nbs/00_core.ipynb 2
+import functools
 import logging
 import time
 import typing as tp
+from datetime import datetime
 
-import streamlit
+import IPython.display
+import ipywidgets as widgets
+import pandas as pd
+import streamlit as st
 from fastcore.basics import in_ipython, listify, noop, patch, patch_to
-from fastcore.test import test_fail, test_eq
+from fastcore.test import test_eq, test_fail
 from IPython.utils.capture import capture_output
 from nbdev.showdoc import show_doc
 
-
-import functools
-
-import IPython.display
-
 # %% ../nbs/00_core.ipynb 3
+from logging import getLogger
+
+logger = getLogger(__name__)
+
+# %% ../nbs/00_core.ipynb 4
 # module obljects that we will be importing
 IN_IPYTHON = in_ipython()
 
-# %% ../nbs/00_core.ipynb 5
-import inspect
+# %% ../nbs/00_core.ipynb 7
+if IN_IPYTHON:
+    from tqdm.notebook import tqdm
+else:
+    from stqdm import stqdm as tqdm
 
+tqdm = tqdm  # make this available in the module namespace
 
+# %% ../nbs/00_core.ipynb 8
 class StreamlitPatcher:
     """class to patch streamlit functions for displaying content in jupyter notebooks"""
 
@@ -37,7 +47,7 @@ class StreamlitPatcher:
     def jupyter(self):
         """
         Registers the current `tqdm` class with
-            streamlit.
+            st.
             ( write
               markdown
 
@@ -56,9 +66,14 @@ class StreamlitPatcher:
         """get all streamlit methods"""
         return [attr for attr in dir(st) if not attr.startswith("_")]
 
-# %% ../nbs/00_core.ipynb 10
+# %% ../nbs/00_core.ipynb 11
 @patch_to(StreamlitPatcher, cls_method=False)
-def _wrap(cls, method_name: str, wrapper: tp.Callable, forced_wrapper_name: tp.Optional[str] = '') -> None:
+def _wrap(
+    cls,
+    method_name: str,
+    wrapper: tp.Callable,
+    forced_wrapper_name: tp.Optional[str] = "",
+) -> None:
     """make a streamlit method jupyter friendly
 
     Parameters
@@ -70,17 +85,21 @@ def _wrap(cls, method_name: str, wrapper: tp.Callable, forced_wrapper_name: tp.O
     """
     if IN_IPYTHON:  # only patch if in jupyter
         if hasattr(wrapper, "__name__"):
-            print(f"wrapping 'streamlit.{method_name}' with 'streamlit_jupyter.core.{wrapper.__name__}'")
+            print(
+                f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper.__name__}'"
+            )
         else:
-            print(f"wrapping 'streamlit.{method_name}' with 'streamlit_jupyter.core.{wrapper}'")
+            print(
+                f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper}'"
+            )
 
-        trg = getattr(streamlit, method_name)
-        setattr(streamlit, method_name, wrapper(trg))
+        trg = getattr(st, method_name)
+        setattr(st, method_name, wrapper(trg))
         cls.registered_methods.add(method_name)
     else:  # otherwise do nothing
         pass
 
-# %% ../nbs/00_core.ipynb 15
+# %% ../nbs/00_core.ipynb 16
 def _display(arg: tp.Any) -> None:
     if isinstance(arg, str):
         IPython.display.display(IPython.display.Markdown(arg))
@@ -98,7 +117,7 @@ def _st_write(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 21
+# %% ../nbs/00_core.ipynb 22
 def _st_heading(func_to_decorate: tp.Callable, tag: str) -> tp.Callable:
     """Decorator to display objects passed to Streamlit in Jupyter notebooks."""
 
@@ -128,9 +147,10 @@ def _st_heading(func_to_decorate: tp.Callable, tag: str) -> tp.Callable:
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 28
+# %% ../nbs/00_core.ipynb 29
 def _st_type_check(
-    func_to_decorate: tp.Callable, allowed_types: tp.Union[tp.Type , tp.Collection[tp.Type]]
+    func_to_decorate: tp.Callable,
+    allowed_types: tp.Union[tp.Type, tp.Collection[tp.Type]],
 ) -> tp.Callable:
     """Decorator to display objects passed to Streamlit in Jupyter notebooks."""
     allowed_types = listify(allowed_types)  # make sure it's a list
@@ -158,27 +178,102 @@ def _st_type_check(
                 f"Unsupported type: {type(body)}, {func_to_decorate.__name__} only accepts {allowed_types}"
             )
 
-    if IN_IPYTHON:
-        return wrapper
-    else:
-        return func_to_decorate
+    return wrapper
 
 # %% ../nbs/00_core.ipynb 33
+def _dummy_wrapper_noop(func_to_decorate):
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        return noop  # castrate the function to do nothing
+
+    return wrapper
+
+# %% ../nbs/00_core.ipynb 39
+class _DummyExpander:
+    def __init__(self, label: str, expanded: bool = False):
+        self.label = label
+        self.expanded = expanded
+
+    def __enter__(self):
+        _display(f">**expander starts**: {self.label}")
+
+    def __exit__(self, *args):
+        _display(f">**expander ends**")
+
+
+def _st_expander(cls_to_replace: st.expander):
+    return _DummyExpander
+
+# %% ../nbs/00_core.ipynb 43
+def _st_text_input(func_to_decorate):
+    """Decorator to display date input in Jupyter notebooks."""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) == 1:
+            description = args[0]
+            if "value" in kwargs:
+                value = kwargs["value"]
+            else:
+                value = None
+
+        elif len(args) == 2:
+            description, value = args
+
+        text = widgets.Textarea(
+            description=description,
+            value=value,
+            disabled=False,
+            placeholder="Type something",
+        )
+
+        display(text)
+        return text.value
+
+    return wrapper
+
+# %% ../nbs/00_core.ipynb 49
+def _st_date_input(func_to_decorate):
+    """Decorator to display date input in Jupyter notebooks."""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) == 1:
+            description = args[0]
+            if "value" in kwargs:
+                value = pd.to_datetime(kwargs["value"]).date()
+            else:
+                value = datetime.now()
+
+        elif len(args) == 2:
+            description = args[0]
+            value = pd.to_datetime(args[1])
+
+        date = widgets.DatePicker(
+            description=description,
+            value=value,
+            disabled=False,
+        )
+
+        display(date)
+        return date.value
+
+    return wrapper
+
+# %% ../nbs/00_core.ipynb 55
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""
     return {
         "write": _st_write,
         "title": functools.partial(_st_heading, tag="#"),
-        'header': functools.partial(_st_heading, tag="##"),
-        'subheader': functools.partial(_st_heading, tag="###"),  
-        'markdown': functools.partial(_st_type_check, allowed_types=str)
-         } 
-
-# %% ../nbs/00_core.ipynb 37
-if IN_IPYTHON:
-    from tqdm.notebook import tqdm
-else:
-    from stqdm import stqdm as tqdm
-
-tqdm = tqdm  # make this available in the module namespace
+        "header": functools.partial(_st_heading, tag="##"),
+        "subheader": functools.partial(_st_heading, tag="###"),
+        "markdown": functools.partial(_st_type_check, allowed_types=str),
+        "dataframe": functools.partial(_st_type_check, allowed_types=pd.DataFrame),
+        "date_input": _st_date_input,
+        "cache": _dummy_wrapper_noop,
+        "expander": _st_expander,
+        "text_input": _st_text_input,
+        "text_area": _st_text_input,
+    }

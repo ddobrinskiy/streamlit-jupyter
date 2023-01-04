@@ -7,7 +7,13 @@ streamlit-jupyter
 
 \[x\] basic replacements for write and headers functions
 
-\[ \] apply function works, akin to `tqdm.pandas()`
+\[x\] apply function works, akin to `tqdm.pandas()`
+
+\[x\] patch st.date_input
+
+\[x\] patch st.text_input, st.text_area
+
+\[ \] patch pickers: single-choice and multiple-choice
 
 \[ \] deploy docs to gh pages
 
@@ -25,12 +31,23 @@ Fill me in please! Don’t forget code examples:
 
 ``` python
 import streamlit as st
-from streamlit_jupyter import StreamlitPatcher
 
-StreamlitPatcher().jupyter() # register streamlit with jupyter-compatible wrappers
+from streamlit_jupyter import StreamlitPatcher, tqdm
+
+StreamlitPatcher().jupyter()  # register streamlit with jupyter-compatible wrappers
 ```
 
-    wrapping 'streamlit.write' with 'streamlit_jupyter.core._st_write'
+    wrapping 'st.write' with 'streamlit_jupyter.core._st_write'
+    wrapping 'st.title' with 'streamlit_jupyter.core.functools.partial(<function _st_heading>, tag='#')'
+    wrapping 'st.header' with 'streamlit_jupyter.core.functools.partial(<function _st_heading>, tag='##')'
+    wrapping 'st.subheader' with 'streamlit_jupyter.core.functools.partial(<function _st_heading>, tag='###')'
+    wrapping 'st.markdown' with 'streamlit_jupyter.core.functools.partial(<function _st_type_check>, allowed_types=<class 'str'>)'
+    wrapping 'st.dataframe' with 'streamlit_jupyter.core.functools.partial(<function _st_type_check>, allowed_types=<class 'pandas.core.frame.DataFrame'>)'
+    wrapping 'st.date_input' with 'streamlit_jupyter.core._st_date_input'
+    wrapping 'st.cache' with 'streamlit_jupyter.core._dummy_wrapper_noop'
+    wrapping 'st.expander' with 'streamlit_jupyter.core._st_expander'
+    wrapping 'st.text_input' with 'streamlit_jupyter.core._st_text_input'
+    wrapping 'st.text_area' with 'streamlit_jupyter.core._st_text_input'
 
 ``` python
 st.write("This is **bold** text")
@@ -40,6 +57,7 @@ This is **bold** text
 
 ``` python
 import pandas as pd
+
 df = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})
 st.write(df)
 ```
@@ -85,3 +103,149 @@ st.write(df)
   </tbody>
 </table>
 </div>
+
+``` python
+st.dataframe(df)
+```
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+``` python
+st.title("This is a title")
+```
+
+# This is a title
+
+``` python
+st.header("This is a header")
+```
+
+## This is a header
+
+``` python
+st.subheader("This is a subheader")
+```
+
+### This is a subheader
+
+### Date Input
+
+``` python
+date = st.date_input("Pick a date", value="2022-12-13")
+```
+
+    DatePicker(value=datetime.date(2022, 12, 13), description='Pick a date')
+
+### Caching
+
+``` python
+import time
+
+
+@st.cache(suppress_st_warning=True)
+def get_data():
+    st.write("Getting data...")
+    for i in tqdm(range(5)):
+        time.sleep(0.1)
+    return pd.DataFrame({"c": [7, 8, 9], "d": [10, 11, 12]})
+
+
+df = get_data()
+st.write(df)
+```
+
+Getting data…
+
+      0%|          | 0/5 [00:00<?, ?it/s]
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>c</th>
+      <th>d</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>8</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>12</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Input freeform text
+
+``` python
+text = st.text_input("Enter some text", value="Hello, world!")
+```
+
+    Textarea(value='Hello, world!', description='Enter some text', placeholder='Type something')
+
+Pick a value from a list

@@ -3,7 +3,7 @@ format:
 	pipenv run nbqa isort nbs/
 
 lint:
-	pipenv run nbqa mypy nbs/
+	pipenv run nbqa mypy nbs/ --ignore-missing-imports --check-untyped-defs
 
 test:
 	pipenv run nbdev_test 
@@ -17,6 +17,9 @@ pipenv-setup:
 readme:
 	pipenv run nbdev_readme
 
-all: format lint test export readme
+clean:
+	nbdev_clean
+
+all: format test export readme clean
 
 
