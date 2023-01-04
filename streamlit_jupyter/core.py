@@ -45,19 +45,10 @@ class StreamlitPatcher:
         self.registered_methods: tp.Set[str] = set()
 
     def jupyter(self, verbose: bool = False):
-        """
-        Registers the current `tqdm` class with
-            st.
-            ( write
-              markdown
-
-            )
-        """
+        """patches streamlit methods to display content in jupyter notebooks"""
         # patch streamlit methods from MAPPING property dict
         for method_name, wrapper in self.MAPPING.items():
             self._wrap(method_name, wrapper, verbose=verbose)
-
-        # patch stqdm
 
         self.is_registered = True
 
@@ -253,7 +244,7 @@ def _st_text_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 55
+# %% ../nbs/00_core.ipynb 54
 def _st_date_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -281,7 +272,7 @@ def _st_date_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 61
+# %% ../nbs/00_core.ipynb 60
 def _st_checkbox(func_to_decorate):
     """Decorator to display checkbox in Jupyter notebooks."""
 
@@ -306,7 +297,7 @@ def _st_checkbox(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 66
+# %% ../nbs/00_core.ipynb 65
 def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     """Decorator to display single choice widget in Jupyter notebooks."""
@@ -336,7 +327,7 @@ def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 71
+# %% ../nbs/00_core.ipynb 70
 def _st_multiselect(func_to_decorate):
     """Decorator to display multiple choice widget in Jupyter notebooks."""
 
@@ -364,7 +355,7 @@ def _st_multiselect(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 76
+# %% ../nbs/00_core.ipynb 75
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""

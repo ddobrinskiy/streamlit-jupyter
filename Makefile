@@ -22,4 +22,9 @@ clean:
 
 all: format test export readme clean
 
+docs:
+	pipenv run nbdev_docs
 
+
+preview: docs
+	pipenv run quarto preview ./nbs
