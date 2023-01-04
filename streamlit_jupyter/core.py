@@ -44,7 +44,7 @@ class StreamlitPatcher:
         self.is_registered: bool = False
         self.registered_methods: tp.Set[str] = set()
 
-    def jupyter(self):
+    def jupyter(self, verbose: bool = False):
         """
         Registers the current `tqdm` class with
             st.
@@ -55,7 +55,7 @@ class StreamlitPatcher:
         """
         # patch streamlit methods from MAPPING property dict
         for method_name, wrapper in self.MAPPING.items():
-            self._wrap(method_name, wrapper)
+            self._wrap(method_name, wrapper, verbose=verbose)
 
         # patch stqdm
 
@@ -73,6 +73,7 @@ def _wrap(
     method_name: str,
     wrapper: tp.Callable,
     forced_wrapper_name: tp.Optional[str] = "",
+    verbose: bool = False,
 ) -> None:
     """make a streamlit method jupyter friendly
 
@@ -84,14 +85,15 @@ def _wrap(
         wrapper function to use
     """
     if IN_IPYTHON:  # only patch if in jupyter
-        if hasattr(wrapper, "__name__"):
-            print(
-                f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper.__name__}'"
-            )
-        else:
-            print(
-                f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper}'"
-            )
+        if verbose:
+            if hasattr(wrapper, "__name__"):
+                print(
+                    f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper.__name__}'"
+                )
+            else:
+                print(
+                    f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper}'"
+                )
 
         trg = getattr(st, method_name)
         setattr(st, method_name, wrapper(trg))
@@ -180,7 +182,26 @@ def _st_type_check(
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 33
+# %% ../nbs/00_core.ipynb 34
+def _st_code(func_to_decorate):
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) == 1:
+            body = args[0]
+            language = kwargs["language"] if "language" in kwargs else "python"
+        elif len(args) == 2:
+            body, language = args
+
+        if isinstance(body, str):
+            _display(f"```{language}\n{body}\n```")
+        else:
+            raise TypeError(
+                f"Unsupported type: {type(body)}, {func_to_decorate.__name__} only accepts strings"
+            )
+
+    return wrapper
+
+# %% ../nbs/00_core.ipynb 39
 def _dummy_wrapper_noop(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
@@ -188,7 +209,7 @@ def _dummy_wrapper_noop(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 39
+# %% ../nbs/00_core.ipynb 45
 class _DummyExpander:
     def __init__(self, label: str, expanded: bool = False):
         self.label = label
@@ -204,7 +225,7 @@ class _DummyExpander:
 def _st_expander(cls_to_replace: st.expander):
     return _DummyExpander
 
-# %% ../nbs/00_core.ipynb 43
+# %% ../nbs/00_core.ipynb 49
 def _st_text_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -232,7 +253,7 @@ def _st_text_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 49
+# %% ../nbs/00_core.ipynb 55
 def _st_date_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -260,7 +281,90 @@ def _st_date_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 55
+# %% ../nbs/00_core.ipynb 61
+def _st_checkbox(func_to_decorate):
+    """Decorator to display checkbox in Jupyter notebooks."""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) == 1:
+            description = args[0]
+            if "value" in kwargs:
+                value = kwargs["value"]
+            else:
+                value = True
+
+        elif len(args) == 2:
+            description, value = args
+
+        w = widgets.Checkbox(
+            value=value, description=description, disabled=False, indent=False
+        )
+
+        display(w)
+        return w.value
+
+    return wrapper
+
+# %% ../nbs/00_core.ipynb 66
+def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
+
+    """Decorator to display single choice widget in Jupyter notebooks."""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) < 1:
+            raise ValueError("You must provide at least 1 argument")
+        if len(args) == 1:
+            label = args[0]
+            options = kwargs["options"]
+            index = kwargs["index"] if "index" in kwargs else 0
+        elif len(args) == 2:
+            label, options = args
+            index = kwargs["index"] if "index" in kwargs else 0
+        elif len(args) == 3:
+            label, options, index = args
+
+        w = jupyter_widget(
+            options=options,
+            description=label,
+            index=index,
+        )
+
+        display(w)
+        return w.value
+
+    return wrapper
+
+# %% ../nbs/00_core.ipynb 71
+def _st_multiselect(func_to_decorate):
+    """Decorator to display multiple choice widget in Jupyter notebooks."""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) < 1:
+            raise ValueError("You must provide at least 1 argument")
+        if len(args) == 1:
+            label = args[0]
+            options = kwargs.get("options")
+        elif len(args) == 2:
+            label, options = args
+            index = kwargs["index"] if "index" in kwargs else 0
+        else:
+            raise ValueError("Too many positional arguments, provide at most 2")
+
+        w = widgets.SelectMultiple(
+            options=options,
+            description=label,
+            value=kwargs.get("default", []),
+        )
+
+        display(w)
+        return w.value
+
+    return wrapper
+
+# %% ../nbs/00_core.ipynb 76
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""
@@ -276,4 +380,13 @@ def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
         "expander": _st_expander,
         "text_input": _st_text_input,
         "text_area": _st_text_input,
+        "code": _st_code,
+        "checkbox": _st_checkbox,
+        "radio": functools.partial(
+            _st_single_choice, jupyter_widget=widgets.RadioButtons
+        ),
+        "selectbox": functools.partial(
+            _st_single_choice, jupyter_widget=widgets.Dropdown
+        ),
+        "multiselect": _st_multiselect,
     }

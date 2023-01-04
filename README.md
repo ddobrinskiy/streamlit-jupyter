@@ -5,19 +5,14 @@ streamlit-jupyter
 
 ## ToDo
 
-\[x\] basic replacements for write and headers functions
+https://github.com/users/ddobrinskiy/projects/4/views/1
 
-\[x\] apply function works, akin to `tqdm.pandas()`
+## Docs
 
-\[x\] patch st.date_input
+Detailed docs for this library can be found at
+[ddobrinskiy.github.io/streamlit-jupyter](https://ddobrinskiy.github.io/streamlit-jupyter)
 
-\[x\] patch st.text_input, st.text_area
-
-\[ \] patch pickers: single-choice and multiple-choice
-
-\[ \] deploy docs to gh pages
-
-\[ \] publish library to PYPI
+The rest of this README provides a quick overview of the library.
 
 ## Install
 

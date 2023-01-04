@@ -3,17 +3,17 @@
 # %% auto 0
 __all__ = []
 
-# %% ../nbs/99_example.ipynb 2
+# %% ../nbs/99_example.ipynb 3
 from datetime import datetime
 
 import streamlit as st
 
 from streamlit_jupyter import StreamlitPatcher, tqdm
 
-# %% ../nbs/99_example.ipynb 4
+# %% ../nbs/99_example.ipynb 5
 st.title("Example")
 
-# %% ../nbs/99_example.ipynb 5
+# %% ../nbs/99_example.ipynb 6
 st.markdown(
     """
 
@@ -24,17 +24,18 @@ If you're seeing this in jupyter, then it's working!
 """
 )
 
-# %% ../nbs/99_example.ipynb 7
+# %% ../nbs/99_example.ipynb 8
 date = st.date_input("Choose a date", datetime.now())
 
-# %% ../nbs/99_example.ipynb 8
+# %% ../nbs/99_example.ipynb 9
 import time
+
 import pandas as pd
 
 
 @st.cache(suppress_st_warning=True)
 def get_data(date):
-    for i in tqdm(range(20)):
+    for i in tqdm(range(10)):
         time.sleep(0.1)
     return pd.DataFrame(
         {"date": [date] * 3, "c": [7, 8, 9], "d": [10, 11, 12]}
@@ -44,26 +45,26 @@ def get_data(date):
 df = get_data(date)
 st.write(df)
 
-# %% ../nbs/99_example.ipynb 9
+# %% ../nbs/99_example.ipynb 10
 st.code("print(1+1)", language="python")
 
-# %% ../nbs/99_example.ipynb 10
+# %% ../nbs/99_example.ipynb 11
 show_code = st.checkbox("Show code", value=True)
 
-# %% ../nbs/99_example.ipynb 11
+# %% ../nbs/99_example.ipynb 12
 if show_code:
     st.code("[i**2 for i in range(100)]")
 
-# %% ../nbs/99_example.ipynb 12
+# %% ../nbs/99_example.ipynb 13
 st.radio("Choose one option", options=["foo", "bar"], index=1)
 
-# %% ../nbs/99_example.ipynb 13
-st.selectbox("Selectbox: ", options=["Jane", "Bob", "Alice"])
-
 # %% ../nbs/99_example.ipynb 14
-st.multiselect("Multiselect: ", options=["python", "golang", "julia", "rust"])
+st.selectbox("Selectbox: ", options=["Jane", "Bob", "Alice"], index=0)
 
 # %% ../nbs/99_example.ipynb 15
+st.multiselect("Multiselect: ", options=["python", "golang", "julia", "rust"])
+
+# %% ../nbs/99_example.ipynb 16
 st.multiselect(
     "Multiselect with defaults: ",
     options=["nbdev", "streamlit", "jupyter", "fastcore"],
