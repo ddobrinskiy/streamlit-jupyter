@@ -5,7 +5,8 @@ streamlit-jupyter
 
 ## ToDo
 
-https://github.com/users/ddobrinskiy/projects/4/views/1
+View ToDos on [github
+project](https://github.com/users/ddobrinskiy/projects/4/views/1)
 
 ## Docs
 
@@ -223,7 +224,7 @@ Getting data…
 </table>
 </div>
 
-## Input freeform text
+### Input freeform text
 
 ``` python
 text = st.text_input("Enter some text", value="Hello, world!")
@@ -232,3 +233,33 @@ text = st.text_input("Enter some text", value="Hello, world!")
     Textarea(value='Hello, world!', description='Enter some text', placeholder='Type something')
 
 Pick a value from a list
+
+``` python
+st.selectbox("Selectbox: ", options=["Jane", "Bob", "Alice"], index=0)
+```
+
+    Dropdown(description='Selectbox: ', options=('Jane', 'Bob', 'Alice'), value='Jane')
+
+    'Jane'
+
+``` python
+st.multiselect("Multiselect: ", options=["python", "golang", "julia", "rust"])
+```
+
+    SelectMultiple(description='Multiselect: ', options=('python', 'golang', 'julia', 'rust'), value=())
+
+    ()
+
+``` python
+st.multiselect(
+    "Multiselect with defaults: ",
+    options=["nbdev", "streamlit", "jupyter", "fastcore"],
+    default=["jupyter", "streamlit"],
+)
+```
+
+    SelectMultiple(description='Multiselect with defaults: ', index=(2, 1), options=('nbdev', 'streamlit', 'jupyte…
+
+    ('jupyter', 'streamlit')
+
+§
