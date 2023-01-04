@@ -32,18 +32,6 @@ from streamlit_jupyter import StreamlitPatcher, tqdm
 StreamlitPatcher().jupyter()  # register streamlit with jupyter-compatible wrappers
 ```
 
-    wrapping 'st.write' with 'streamlit_jupyter.core._st_write'
-    wrapping 'st.title' with 'streamlit_jupyter.core.functools.partial(<function _st_heading>, tag='#')'
-    wrapping 'st.header' with 'streamlit_jupyter.core.functools.partial(<function _st_heading>, tag='##')'
-    wrapping 'st.subheader' with 'streamlit_jupyter.core.functools.partial(<function _st_heading>, tag='###')'
-    wrapping 'st.markdown' with 'streamlit_jupyter.core.functools.partial(<function _st_type_check>, allowed_types=<class 'str'>)'
-    wrapping 'st.dataframe' with 'streamlit_jupyter.core.functools.partial(<function _st_type_check>, allowed_types=<class 'pandas.core.frame.DataFrame'>)'
-    wrapping 'st.date_input' with 'streamlit_jupyter.core._st_date_input'
-    wrapping 'st.cache' with 'streamlit_jupyter.core._dummy_wrapper_noop'
-    wrapping 'st.expander' with 'streamlit_jupyter.core._st_expander'
-    wrapping 'st.text_input' with 'streamlit_jupyter.core._st_text_input'
-    wrapping 'st.text_area' with 'streamlit_jupyter.core._st_text_input'
-
 ``` python
 st.write("This is **bold** text")
 ```
