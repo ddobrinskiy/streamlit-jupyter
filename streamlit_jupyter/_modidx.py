@@ -32,4 +32,5 @@ d = { 'settings': { 'branch': 'master',
                                         'streamlit_jupyter.core._st_heading': ('core.html#_st_heading', 'streamlit_jupyter/core.py'),
                                         'streamlit_jupyter.core._st_text_input': ('core.html#_st_text_input', 'streamlit_jupyter/core.py'),
                                         'streamlit_jupyter.core._st_type_check': ('core.html#_st_type_check', 'streamlit_jupyter/core.py'),
-                                        'streamlit_jupyter.core._st_write': ('core.html#_st_write', 'streamlit_jupyter/core.py')}}}
+                                        'streamlit_jupyter.core._st_write': ('core.html#_st_write', 'streamlit_jupyter/core.py')},
+            'streamlit_jupyter.example': {'streamlit_jupyter.example.get_data': ('example.html#get_data', 'streamlit_jupyter/example.py')}}}
