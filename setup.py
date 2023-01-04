@@ -2,6 +2,7 @@ from configparser import ConfigParser
 
 from pkg_resources import parse_version
 from setuptools import find_packages, setup
+import setuptools
 
 assert parse_version(setuptools.__version__) >= parse_version("36.2")
 
