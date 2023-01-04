@@ -83,6 +83,7 @@ setup(
             "pre-commit",
             "vistir==0.6.1",
             "tqdm",
+            "mypy",
         ],
     },
     dependency_links=[],
