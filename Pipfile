@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+streamlit = "*"
+jupyter = "*"
+tqdm = "*"
+
+[dev-packages]
+black = "*"
+fastcore = "*"
+ipykernel = "*"
+ipywidgets = "==7.7.2"
+isort = "*"
+nbdev = "*"
+nbqa = "*"
+pipenv-setup = "==3.2.0"
+pre-commit = "*"
+vistir = "==0.6.1"
+tqdm = "*"
+
+[requires]
+python_version = "3.8"

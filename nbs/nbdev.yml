@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "streamlit-jupyter"
+  site-url: "https://ddobrinskiy.github.io/streamlit-jupyter"
+  description: "Simple Python package to preview and develop streamlit apps in jupyter notebooks"
+  repo-branch: master
+  repo-url: "https://github.com/ddobrinskiy/streamlit-jupyter"
