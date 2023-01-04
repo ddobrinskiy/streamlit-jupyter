@@ -1,0 +1,6 @@
+website:
+  sidebar:
+    contents:
+      - 00_core.ipynb
+      - 99_example.ipynb
+      - README.ipynb
