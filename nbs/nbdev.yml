@@ -1,7 +1,5 @@
 project:
   output-dir: _docs
-  render:
-    - "!99_example.ipynb"
 
 website:
   title: "streamlit-jupyter"
