@@ -1,8 +1,8 @@
 from configparser import ConfigParser
 
+import setuptools
 from pkg_resources import parse_version
 from setuptools import find_packages, setup
-import setuptools
 
 assert parse_version(setuptools.__version__) >= parse_version("36.2")
 
@@ -37,7 +37,7 @@ licenses = {
     "bsd3": ("BSD License", "OSI Approved :: BSD License"),
 }
 statuses = [
-    "1 - Planning",
+    "0 - Pre-planning" "1 - Planning",
     "2 - Pre-Alpha",
     "3 - Alpha",
     "4 - Beta",
@@ -45,7 +45,7 @@ statuses = [
     "6 - Mature",
     "7 - Inactive",
 ]
-py_versions = "3.6 3.7 3.8 3.9 3.10".split()
+py_versions = "3.6 3.7 3.8 3.9 3.10 3.11".split()
 
 requirements = cfg.get("requirements", "").split()
 if cfg.get("pip_requirements"):
