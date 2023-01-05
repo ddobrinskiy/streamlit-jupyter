@@ -37,7 +37,8 @@ licenses = {
     "bsd3": ("BSD License", "OSI Approved :: BSD License"),
 }
 statuses = [
-    "0 - Pre-planning" "1 - Planning",
+    "0 - Pre-planning",
+    "1 - Planning",
     "2 - Pre-Alpha",
     "3 - Alpha",
     "4 - Beta",
