@@ -27,6 +27,8 @@ The main idea is for you do experiment and develop in your notebook,
 visually see all the pieces, and then convert the notebook to `.py` to
 be run by streamlit
 
+start by importing streamlit and patching it with streamlit-jupyter:
+
 ``` python
 import streamlit as st
 
@@ -34,6 +36,12 @@ from streamlit_jupyter import StreamlitPatcher, tqdm
 
 StreamlitPatcher().jupyter()  # register streamlit with jupyter-compatible wrappers
 ```
+
+And now develop your notebook as usual, but with the ability to use
+Streamlit widgets and components.
+
+See how it works below, and check out the [example
+notebook](./examples/99_example.ipynb)
 
 ## Demonstration
 
