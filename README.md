@@ -8,7 +8,6 @@ streamlit-jupyter
 - Detailed docs for this library can be found at
   [ddobrinskiy.github.io/streamlit-jupyter](https://ddobrinskiy.github.io/streamlit-jupyter)
 
-
 - ToDos on [github
   project](https://github.com/users/ddobrinskiy/projects/4/views/1)
 
@@ -22,7 +21,11 @@ pip install streamlit_jupyter
 
 ## How to use
 
-Take a look at our [example notebook](./nbs/99_example.ipynb)
+Take a look at our [example notebook](./examples/99_example.ipynb)
+
+The main idea is for you do experiment and develop in your notebook,
+visually see all the pieces, and then convert the notebook to `.py` to
+be run by streamlit
 
 ``` python
 import streamlit as st
@@ -32,232 +35,12 @@ from streamlit_jupyter import StreamlitPatcher, tqdm
 StreamlitPatcher().jupyter()  # register streamlit with jupyter-compatible wrappers
 ```
 
-``` python
-st.write("This is **bold** text")
-```
+## Demonstration
 
-This is **bold** text
-
-``` python
-import pandas as pd
-
-df = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})
-st.write(df)
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>a</th>
-      <th>b</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>6</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-``` python
-st.dataframe(df)
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>a</th>
-      <th>b</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>6</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-``` python
-st.title("This is a title")
-```
-
-# This is a title
-
-``` python
-st.header("This is a header")
-```
-
-## This is a header
-
-``` python
-st.subheader("This is a subheader")
-```
-
-### This is a subheader
-
-### Date Input
-
-``` python
-date = st.date_input("Pick a date", value="2022-12-13")
-```
-
-    DatePicker(value=datetime.date(2022, 12, 13), description='Pick a date')
-
-### Caching
-
-``` python
-import time
-
-
-@st.cache(suppress_st_warning=True)
-def get_data():
-    st.write("Getting data...")
-    for i in tqdm(range(5)):
-        time.sleep(0.1)
-    return pd.DataFrame({"c": [7, 8, 9], "d": [10, 11, 12]})
-
-
-df = get_data()
-st.write(df)
-```
-
-Getting data…
-
-      0%|          | 0/5 [00:00<?, ?it/s]
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>c</th>
-      <th>d</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>7</td>
-      <td>10</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>8</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>9</td>
-      <td>12</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-### Input freeform text
-
-``` python
-text = st.text_input("Enter some text", value="Hello, world!")
-```
-
-    Textarea(value='Hello, world!', description='Enter some text', placeholder='Type something')
-
-Pick a value from a list
-
-``` python
-st.selectbox("Selectbox: ", options=["Jane", "Bob", "Alice"], index=0)
-```
-
-    Dropdown(description='Selectbox: ', options=('Jane', 'Bob', 'Alice'), value='Jane')
-
-    'Jane'
-
-``` python
-st.multiselect("Multiselect: ", options=["python", "golang", "julia", "rust"])
-```
-
-    SelectMultiple(description='Multiselect: ', options=('python', 'golang', 'julia', 'rust'), value=())
-
-    ()
-
-``` python
-st.multiselect(
-    "Multiselect with defaults: ",
-    options=["nbdev", "streamlit", "jupyter", "fastcore"],
-    default=["jupyter", "streamlit"],
-)
-```
-
-    SelectMultiple(description='Multiselect with defaults: ', index=(2, 1), options=('nbdev', 'streamlit', 'jupyte…
-
-    ('jupyter', 'streamlit')
-
+|                                       | <img src="./images/favicon_jupyter.ico" width="30" /> Jupyter | <img src="./images/favicon_streamlit.ico" height="25" /> Streamlit |
+|:-------------------------------------:|:-------------------------------------------------------------:|:------------------------------------------------------------------:|
+|         Markdown and headings         |                ![alt](images/img1_jupyter.png)                |                 ![alt](images/img1_streamlit.png)                  |
+|        Interactive data entry         |                ![alt](images/img2_jupyter.png)                |                 ![alt](images/img2_streamlit.png)                  |
+|            Pick and choose            |                ![alt](images/img5_jupyter.gif)                |                 ![alt](images/img5_streamlit.gif)                  |
+| Dataframes, caching and progress bars |                ![alt](images/img3_jupyter.gif)                |                 ![alt](images/img3_streamlit.gif)                  |
+|                 Plots                 |                ![alt](images/img4_jupyter.png)                |                 ![alt](images/img4_streamlit.png)                  |
