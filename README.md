@@ -8,6 +8,7 @@ streamlit-jupyter
 - Detailed docs for this library can be found at
   [ddobrinskiy.github.io/streamlit-jupyter](https://ddobrinskiy.github.io/streamlit-jupyter)
 
+
 - ToDos on [github
   project](https://github.com/users/ddobrinskiy/projects/4/views/1)
 
@@ -259,3 +260,4 @@ st.multiselect(
     SelectMultiple(description='Multiselect with defaults: ', index=(2, 1), options=('nbdev', 'streamlit', 'jupyte…
 
     ('jupyter', 'streamlit')
+
