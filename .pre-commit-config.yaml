@@ -1,0 +1,21 @@
+repos:
+  - repo: https://github.com/fastai/nbdev
+    rev: 2.2.10
+    hooks:
+      - id: nbdev_clean
+      - id: nbdev_export
+
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.5.3
+    hooks:
+      - id: nbqa-black
+        exclude: "_proc/.*"
+      - id: nbqa-isort
+        exclude: "_proc/.*"
+
+  - repo: https://github.com/Madoshakalaka/pipenv-setup
+    rev: v3.2.0
+    hooks:
+      - id: pipenv-setup
+        args: [--dev, --pipfile]
+        additional_dependencies: ["vistir==0.6.1", ".[black]"]
