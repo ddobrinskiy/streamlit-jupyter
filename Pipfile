@@ -9,6 +9,7 @@ ipywidgets = "==7.7.2"
 jupyter = "*"
 streamlit = "*"
 tqdm = "*"
+tabulate = "*"
 
 [dev-packages]
 black = "*"

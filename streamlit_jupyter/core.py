@@ -63,7 +63,6 @@ def _wrap(
     cls,
     method_name: str,
     wrapper: tp.Callable,
-    forced_wrapper_name: tp.Optional[str] = "",
     verbose: bool = False,
 ) -> None:
     """make a streamlit method jupyter friendly
@@ -86,11 +85,9 @@ def _wrap(
                     f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper}'"
                 )
 
-        trg = getattr(st, method_name)
-        setattr(st, method_name, wrapper(trg))
-        cls.registered_methods.add(method_name)
-    else:  # otherwise do nothing
-        pass
+        trg = getattr(st, method_name)  # get the streamlit method
+        setattr(st, method_name, wrapper(trg))  # patch the method
+        cls.registered_methods.add(method_name)  # add to registered methods
 
 # %% ../nbs/00_core.ipynb 16
 def _display(arg: tp.Any) -> None:
@@ -202,6 +199,8 @@ def _dummy_wrapper_noop(func_to_decorate):
 
 # %% ../nbs/00_core.ipynb 45
 class _DummyExpander:
+    __doc__ = st.expander.__doc__
+
     def __init__(self, label: str, expanded: bool = False):
         self.label = label
         self.expanded = expanded
