@@ -45,6 +45,43 @@ Streamlit widgets and components.
 See how it works below, and check out the [example
 notebook](./examples/99_example.ipynb)
 
+## Currently supported methods
+
+Refer to excellent [streamlit
+docs](https://docs.streamlit.io/library/api-reference) for more details
+on each method
+
+| method           | docstring                                                        |
+|:-----------------|:-----------------------------------------------------------------|
+| `st.cache`       | Function decorator to memoize function executions.               |
+| `st.checkbox`    | Display a checkbox widget.                                       |
+| `st.code`        | Display a code block with optional syntax highlighting.          |
+| `st.dataframe`   | Display a dataframe as an interactive table.                     |
+| `st.date_input`  | Display a date input widget.                                     |
+| `st.expander`    | Insert a multi-element container that can be expanded/collapsed. |
+| `st.header`      | Display text in header formatting.                               |
+| `st.markdown`    | Display string formatted as Markdown.                            |
+| `st.multiselect` | Display a multiselect widget.                                    |
+| `st.radio`       | Display a radio button widget.                                   |
+| `st.selectbox`   | Display a select widget.                                         |
+| `st.subheader`   | Display text in subheader formatting.                            |
+| `st.text_area`   | Display a multi-line text input widget.                          |
+| `st.text_input`  | Display a single-line text input widget.                         |
+| `st.title`       | Display text in title formatting.                                |
+| `st.write`       | Write arguments to the app.                                      |
+
+## Currently **un**supported methods
+
+Most of the other methods are not supported yet.
+
+If you need any of them, you have one of 2 options:
+
+- please open an issue or a PR
+
+- use them in your notebook regardless, they will still work once you
+  convert your notebook to streamlit. You just won’t be able to preview
+  them in jupyter.
+
 ## Demonstration
 
 |                                       | <img src="./images/favicon_jupyter.ico" width="30" /> Jupyter | <img src="./images/favicon_streamlit.ico" height="25" /> Streamlit |

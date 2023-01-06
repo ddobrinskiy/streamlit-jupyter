@@ -71,7 +71,14 @@ setup(
     url=cfg["git_url"],
     packages=find_packages(),
     include_package_data=True,
-    install_requires=["fastcore", "ipywidgets==7.7.2", "jupyter", "streamlit", "tqdm"],
+    install_requires=[
+        "fastcore",
+        "ipywidgets==7.7.2",
+        "jupyter",
+        "streamlit",
+        "tqdm",
+        "tabulate",
+    ],
     extras_require={
         "dev": [
             "black",

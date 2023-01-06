@@ -63,7 +63,6 @@ def _wrap(
     cls,
     method_name: str,
     wrapper: tp.Callable,
-    forced_wrapper_name: tp.Optional[str] = "",
     verbose: bool = False,
 ) -> None:
     """make a streamlit method jupyter friendly
@@ -86,11 +85,9 @@ def _wrap(
                     f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper}'"
                 )
 
-        trg = getattr(st, method_name)
-        setattr(st, method_name, wrapper(trg))
-        cls.registered_methods.add(method_name)
-    else:  # otherwise do nothing
-        pass
+        trg = getattr(st, method_name)  # get the streamlit method
+        setattr(st, method_name, wrapper(trg))  # patch the method
+        cls.registered_methods.add(method_name)  # add to registered methods
 
 # %% ../nbs/00_core.ipynb 16
 def _display(arg: tp.Any) -> None:
@@ -202,6 +199,8 @@ def _dummy_wrapper_noop(func_to_decorate):
 
 # %% ../nbs/00_core.ipynb 45
 class _DummyExpander:
+    __doc__ = st.expander.__doc__
+
     def __init__(self, label: str, expanded: bool = False):
         self.label = label
         self.expanded = expanded
@@ -216,7 +215,7 @@ class _DummyExpander:
 def _st_expander(cls_to_replace: st.expander):
     return _DummyExpander
 
-# %% ../nbs/00_core.ipynb 49
+# %% ../nbs/00_core.ipynb 50
 def _st_text_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -244,7 +243,7 @@ def _st_text_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 54
+# %% ../nbs/00_core.ipynb 55
 def _st_date_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -272,7 +271,7 @@ def _st_date_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 60
+# %% ../nbs/00_core.ipynb 61
 def _st_checkbox(func_to_decorate):
     """Decorator to display checkbox in Jupyter notebooks."""
 
@@ -297,7 +296,7 @@ def _st_checkbox(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 65
+# %% ../nbs/00_core.ipynb 66
 def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     """Decorator to display single choice widget in Jupyter notebooks."""
@@ -327,7 +326,7 @@ def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 70
+# %% ../nbs/00_core.ipynb 71
 def _st_multiselect(func_to_decorate):
     """Decorator to display multiple choice widget in Jupyter notebooks."""
 
@@ -355,7 +354,7 @@ def _st_multiselect(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/00_core.ipynb 75
+# %% ../nbs/00_core.ipynb 76
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""
