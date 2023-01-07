@@ -98,3 +98,4 @@ If you need any of them, you have one of 2 options:
 |            Pick and choose            |                ![alt](images/img5_jupyter.gif)                |                 ![alt](images/img5_streamlit.gif)                  |
 | Dataframes, caching and progress bars |                ![alt](images/img3_jupyter.gif)                |                 ![alt](images/img3_streamlit.gif)                  |
 |                 Plots                 |                ![alt](images/img4_jupyter.png)                |                 ![alt](images/img4_streamlit.png)                  |
+|                Metrics                |                ![alt](images/img6_jupyter.png)                |                 ![alt](images/img6_streamlit.png)                  |

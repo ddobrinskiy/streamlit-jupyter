@@ -59,7 +59,7 @@ fig = px.line(df_daily, title="Daily mean", width=600)
 st.write(fig)
 
 # %% 99_example.ipynb 15
-st.metric("Speed", 300, 210, delta_color="normal", label_visibility="hidden")
+st.metric("Speed", 300, 210, delta_color="normal", label_visibility="visible")
 
 # %% 99_example.ipynb 16
 st.code("print(1+1)", language="python")
@@ -92,6 +92,3 @@ st.subheader("st.text:")
 st.text("This is a text")
 st.text("This is \n multiline text")
 st.code("This is multiline \n code", language=None)
-
-# %% 99_example.ipynb 24
-st.metric("Speed", 300, 210, delta_color="inverse", label_visibility="hidden")
