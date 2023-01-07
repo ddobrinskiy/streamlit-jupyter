@@ -62,6 +62,7 @@ on each method
 | `st.date_input`  | Display a date input widget.                                     |
 | `st.expander`    | Insert a multi-element container that can be expanded/collapsed. |
 | `st.header`      | Display text in header formatting.                               |
+| `st.json`        | Display object or string as a pretty-printed JSON string.        |
 | `st.markdown`    | Display string formatted as Markdown.                            |
 | `st.multiselect` | Display a multiselect widget.                                    |
 | `st.radio`       | Display a radio button widget.                                   |
@@ -69,6 +70,7 @@ on each method
 | `st.subheader`   | Display text in subheader formatting.                            |
 | `st.text_area`   | Display a multi-line text input widget.                          |
 | `st.text_input`  | Display a single-line text input widget.                         |
+| `st.text`        | Write fixed-width and preformatted text.                         |
 | `st.title`       | Display text in title formatting.                                |
 | `st.write`       | Write arguments to the app.                                      |
 
