@@ -53,26 +53,29 @@ Refer to excellent [streamlit
 docs](https://docs.streamlit.io/library/api-reference) for more details
 on each method
 
-| method           | docstring                                                        |
-|:-----------------|:-----------------------------------------------------------------|
-| `st.cache`       | Function decorator to memoize function executions.               |
-| `st.checkbox`    | Display a checkbox widget.                                       |
-| `st.code`        | Display a code block with optional syntax highlighting.          |
-| `st.dataframe`   | Display a dataframe as an interactive table.                     |
-| `st.date_input`  | Display a date input widget.                                     |
-| `st.expander`    | Insert a multi-element container that can be expanded/collapsed. |
-| `st.header`      | Display text in header formatting.                               |
-| `st.json`        | Display object or string as a pretty-printed JSON string.        |
-| `st.markdown`    | Display string formatted as Markdown.                            |
-| `st.multiselect` | Display a multiselect widget.                                    |
-| `st.radio`       | Display a radio button widget.                                   |
-| `st.selectbox`   | Display a select widget.                                         |
-| `st.subheader`   | Display text in subheader formatting.                            |
-| `st.text_area`   | Display a multi-line text input widget.                          |
-| `st.text_input`  | Display a single-line text input widget.                         |
-| `st.text`        | Write fixed-width and preformatted text.                         |
-| `st.title`       | Display text in title formatting.                                |
-| `st.write`       | Write arguments to the app.                                      |
+| method           | docstring                                                                                |
+|:-----------------|:-----------------------------------------------------------------------------------------|
+| `st.cache`       | Function decorator to memoize function executions.                                       |
+| `st.caption`     | Display text in small font.                                                              |
+| `st.checkbox`    | Display a checkbox widget.                                                               |
+| `st.code`        | Display a code block with optional syntax highlighting.                                  |
+| `st.dataframe`   | Display a dataframe as an interactive table.                                             |
+| `st.date_input`  | Display a date input widget.                                                             |
+| `st.expander`    | Insert a multi-element container that can be expanded/collapsed.                         |
+| `st.header`      | Display text in header formatting.                                                       |
+| `st.json`        | Display object or string as a pretty-printed JSON string.                                |
+| `st.latex`       | Display mathematical expressions formatted as LaTeX.                                     |
+| `st.markdown`    | Display string formatted as Markdown.                                                    |
+| `st.metric`      | Display a metric in big bold font, with an optional indicator of how the metric changed. |
+| `st.multiselect` | Display a multiselect widget.                                                            |
+| `st.radio`       | Display a radio button widget.                                                           |
+| `st.selectbox`   | Display a select widget.                                                                 |
+| `st.subheader`   | Display text in subheader formatting.                                                    |
+| `st.text_area`   | Display a multi-line text input widget.                                                  |
+| `st.text_input`  | Display a single-line text input widget.                                                 |
+| `st.text`        | Write fixed-width and preformatted text.                                                 |
+| `st.title`       | Display text in title formatting.                                                        |
+| `st.write`       | Write arguments to the app.                                                              |
 
 ## Currently **un**supported methods
 
@@ -95,3 +98,4 @@ If you need any of them, you have one of 2 options:
 |            Pick and choose            |                ![alt](images/img5_jupyter.gif)                |                 ![alt](images/img5_streamlit.gif)                  |
 | Dataframes, caching and progress bars |                ![alt](images/img3_jupyter.gif)                |                 ![alt](images/img3_streamlit.gif)                  |
 |                 Plots                 |                ![alt](images/img4_jupyter.png)                |                 ![alt](images/img4_streamlit.png)                  |
+|                Metrics                |                ![alt](images/img6_jupyter.png)                |                 ![alt](images/img6_streamlit.png)                  |
