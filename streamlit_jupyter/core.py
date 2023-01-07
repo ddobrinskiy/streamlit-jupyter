@@ -561,7 +561,7 @@ def _st_metric(func_to_decorate):
         logger.warning(msg)
         return func_to_decorate
 
-# %% ../nbs/01_core.ipynb 110
+# %% ../nbs/01_core.ipynb 111
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""
