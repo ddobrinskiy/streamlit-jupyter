@@ -20,7 +20,7 @@ readme:
 clean:
 	nbdev_clean
 
-all: format test export readme clean
+all: format export test readme clean
 
 docs:
 	pipenv run nbdev_docs
