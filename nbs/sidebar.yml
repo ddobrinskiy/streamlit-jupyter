@@ -1,6 +1,6 @@
 website:
   sidebar:
     contents:
-      - 00_core.ipynb
-      - 99_example.ipynb
+      - 00_utils.ipynb
+      - 01_core.ipynb
       - README.ipynb
