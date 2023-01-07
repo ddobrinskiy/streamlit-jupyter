@@ -141,6 +141,25 @@ def _st_heading(func_to_decorate: tp.Callable, tag: str) -> tp.Callable:
     return wrapper
 
 # %% ../nbs/01_core.ipynb 29
+def _st_caption(func_to_decorate):
+    """Decorator to display json"""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) == 0:
+            raise ValueError(f"at least one positional argument is required")
+        elif len(args) == 1:
+            body = args[0]
+
+        if isinstance(body, str):
+            body_caption = "\n".join([f"> {line}" for line in body.split("\n")])
+            _display(body_caption)
+        else:
+            raise TypeError(f"Unsupported type: {type(body)}")
+
+    return wrapper
+
+# %% ../nbs/01_core.ipynb 33
 def _st_type_check(
     func_to_decorate: tp.Callable,
     allowed_types: tp.Union[tp.Type, tp.Collection[tp.Type]],
@@ -173,11 +192,11 @@ def _st_type_check(
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 33
+# %% ../nbs/01_core.ipynb 37
 def _jupyter_display_code(body: str, language: str = "python") -> None:
     _display(f"```{language}\n{body}\n```")
 
-# %% ../nbs/01_core.ipynb 34
+# %% ../nbs/01_core.ipynb 38
 def _st_code(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
@@ -197,7 +216,7 @@ def _st_code(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 41
+# %% ../nbs/01_core.ipynb 45
 def _st_json(func_to_decorate):
     """Decorator to display json"""
 
@@ -227,7 +246,7 @@ def _st_json(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 50
+# %% ../nbs/01_core.ipynb 54
 def _dummy_wrapper_noop(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
@@ -235,7 +254,7 @@ def _dummy_wrapper_noop(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 56
+# %% ../nbs/01_core.ipynb 60
 class _DummyExpander:
     __doc__ = st.expander.__doc__
 
@@ -253,7 +272,7 @@ class _DummyExpander:
 def _st_expander(cls_to_replace: st.expander):
     return _DummyExpander
 
-# %% ../nbs/01_core.ipynb 60
+# %% ../nbs/01_core.ipynb 64
 def _st_text_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -281,7 +300,7 @@ def _st_text_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 65
+# %% ../nbs/01_core.ipynb 69
 def _st_date_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -309,7 +328,7 @@ def _st_date_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 71
+# %% ../nbs/01_core.ipynb 75
 def _st_checkbox(func_to_decorate):
     """Decorator to display checkbox in Jupyter notebooks."""
 
@@ -334,7 +353,7 @@ def _st_checkbox(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 76
+# %% ../nbs/01_core.ipynb 80
 def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     """Decorator to display single choice widget in Jupyter notebooks."""
@@ -364,7 +383,7 @@ def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 81
+# %% ../nbs/01_core.ipynb 85
 def _st_multiselect(func_to_decorate):
     """Decorator to display multiple choice widget in Jupyter notebooks."""
 
@@ -392,7 +411,7 @@ def _st_multiselect(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 86
+# %% ../nbs/01_core.ipynb 90
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""
@@ -401,6 +420,7 @@ def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
         "title": functools.partial(_st_heading, tag="#"),
         "header": functools.partial(_st_heading, tag="##"),
         "subheader": functools.partial(_st_heading, tag="###"),
+        "caption": _st_caption,
         "markdown": functools.partial(_st_type_check, allowed_types=str),
         "dataframe": functools.partial(_st_type_check, allowed_types=pd.DataFrame),
         "date_input": _st_date_input,

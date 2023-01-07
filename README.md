@@ -56,6 +56,7 @@ on each method
 | method           | docstring                                                        |
 |:-----------------|:-----------------------------------------------------------------|
 | `st.cache`       | Function decorator to memoize function executions.               |
+| `st.caption`     | Display text in small font.                                      |
 | `st.checkbox`    | Display a checkbox widget.                                       |
 | `st.code`        | Display a code block with optional syntax highlighting.          |
 | `st.dataframe`   | Display a dataframe as an interactive table.                     |
@@ -70,7 +71,6 @@ on each method
 | `st.subheader`   | Display text in subheader formatting.                            |
 | `st.text_area`   | Display a multi-line text input widget.                          |
 | `st.text_input`  | Display a single-line text input widget.                         |
-| `st.text`        | Write fixed-width and preformatted text.                         |
 | `st.title`       | Display text in title formatting.                                |
 | `st.write`       | Write arguments to the app.                                      |
 
