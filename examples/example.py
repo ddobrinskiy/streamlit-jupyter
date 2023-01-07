@@ -35,12 +35,13 @@ st.markdown(f"## Hello {name}!\n## The date is {date.strftime('%Y-%m-%d')}")
 
 # %% 99_example.ipynb 11
 import time
+
 import pandas as pd
 
 
 @st.cache(suppress_st_warning=True)
 def get_data(date):
-    for i in tqdm(range(20)):
+    for i in tqdm(range(10)):
         time.sleep(0.1)
     return pd.DataFrame(
         {"date": pd.date_range(date, periods=3), "c": [7, 8, 5], "d": [10, 11, 3]}
@@ -82,3 +83,12 @@ options = st.multiselect(
     options=["nbdev", "streamlit", "jupyter", "fastcore"],
     default=["jupyter", "streamlit"],
 )
+
+# %% 99_example.ipynb 22
+st.subheader("st.text:")
+st.text("This is a text")
+st.text("This is \n multiline text")
+st.code("This is multiline \n code", language=None)
+
+# %% 99_example.ipynb 23
+st.metric("Speed", 300, 210, delta_color="inverse", label_visibility="hidden")

@@ -208,7 +208,6 @@ def _st_code(func_to_decorate):
 
         if isinstance(body, str):
             _jupyter_display_code(body, language=language)
-            # _display(f"```{language}\n{body}\n```")
         else:
             raise TypeError(
                 f"Unsupported type: {type(body)}, {func_to_decorate.__name__} only accepts strings"
@@ -217,6 +216,54 @@ def _st_code(func_to_decorate):
     return wrapper
 
 # %% ../nbs/01_core.ipynb 45
+def _st_text(func_to_decorate):
+    """Decorator to display mono-spaced text"""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) == 0:
+            raise ValueError(f"at least one positional argument is required")
+        elif len(args) == 1:
+            body = args[0]
+        elif len(args) >= 2:
+            raise ValueError("Only one positional argument is supported")
+
+        if isinstance(body, str):
+            _jupyter_display_code(body, language=None)
+        else:
+            raise TypeError(
+                f"Unsupported type: {type(body)}, {func_to_decorate.__name__} only accepts strings and dicts"
+            )
+
+    return wrapper
+
+# %% ../nbs/01_core.ipynb 48
+from IPython.display import Latex
+
+
+def _st_latex(func_to_decorate):
+    """Decorator to display latex equations"""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        if len(args) == 0:
+            raise ValueError(f"at least one positional argument is required")
+        elif len(args) == 1:
+            body = args[0]
+        elif len(args) >= 2:
+            raise ValueError("Only one positional argument is supported")
+
+        if isinstance(body, str):
+            body = rf"\begin{{equation}}{body}\end{{equation}}"
+            display(Latex(body))
+        else:
+            raise TypeError(
+                f"Unsupported type: {type(body)}, {func_to_decorate.__name__} only accepts strings and dicts"
+            )
+
+    return wrapper
+
+# %% ../nbs/01_core.ipynb 53
 def _st_json(func_to_decorate):
     """Decorator to display json"""
 
@@ -227,6 +274,8 @@ def _st_json(func_to_decorate):
         elif len(args) == 1:
             body = args[0]
             expanded = kwargs.get("expanded", True)
+        elif len(args) >= 2:
+            raise ValueError("Only one positional argument is supported")
 
         if isinstance(body, str) and not expanded:
             _jupyter_display_code(body, language="json")
@@ -246,7 +295,7 @@ def _st_json(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 54
+# %% ../nbs/01_core.ipynb 62
 def _dummy_wrapper_noop(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
@@ -254,7 +303,7 @@ def _dummy_wrapper_noop(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 60
+# %% ../nbs/01_core.ipynb 68
 class _DummyExpander:
     __doc__ = st.expander.__doc__
 
@@ -272,7 +321,7 @@ class _DummyExpander:
 def _st_expander(cls_to_replace: st.expander):
     return _DummyExpander
 
-# %% ../nbs/01_core.ipynb 64
+# %% ../nbs/01_core.ipynb 72
 def _st_text_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -300,7 +349,7 @@ def _st_text_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 69
+# %% ../nbs/01_core.ipynb 77
 def _st_date_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -328,7 +377,7 @@ def _st_date_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 75
+# %% ../nbs/01_core.ipynb 83
 def _st_checkbox(func_to_decorate):
     """Decorator to display checkbox in Jupyter notebooks."""
 
@@ -353,7 +402,7 @@ def _st_checkbox(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 80
+# %% ../nbs/01_core.ipynb 88
 def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     """Decorator to display single choice widget in Jupyter notebooks."""
@@ -383,7 +432,7 @@ def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 85
+# %% ../nbs/01_core.ipynb 93
 def _st_multiselect(func_to_decorate):
     """Decorator to display multiple choice widget in Jupyter notebooks."""
 
@@ -411,7 +460,108 @@ def _st_multiselect(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 90
+# %% ../nbs/01_core.ipynb 98
+def _plot_metric(*, label, value, delta=None, label_visibility="visible"):
+    import plotly.graph_objects as go
+
+    if delta is None:
+        mode = "number"
+        template = {
+            "data": {
+                "indicator": [
+                    {
+                        "title": {"text": label},
+                    }
+                ]
+            }
+        }
+    else:
+        mode = "number+delta"
+        template = {
+            "data": {
+                "indicator": [
+                    {
+                        "title": {"text": label},
+                        "delta": {"reference": value - delta},
+                    }
+                ]
+            }
+        }
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Indicator(
+            mode=mode,
+            value=value,
+        )
+    )
+
+    fig.update_layout(width=300, height=300, template=template)
+
+    if label_visibility != "hidden":
+        fig.show()
+
+
+def _st_metric(func_to_decorate):
+    """wrapper for st.metric"""
+
+    @functools.wraps(func_to_decorate)
+    def wrapper(*args, **kwargs):
+        # some unsupported kwargs, None by default
+        delta_color = kwargs.get("delta_color")
+        help = kwargs.get("help")
+        label_visibility = kwargs.get("label_visibility")
+
+        allowed_values = {
+            "label_visibility": ["visible", "hidden", "collapsed", None],
+            "delta_color": ["normal", "inverse", "off", None],
+        }
+        for k, v in allowed_values.items():
+            if not eval(f"{k} in v"):
+                got = eval(f"{k}")
+                raise ValueError(f"'{k}' must be one of {v}, got '{got}' instead")
+
+        if len(args) == 0:
+            label = kwargs.get("label")
+            value = kwargs.get("value")
+            delta = kwargs.get("delta")
+        if len(args) == 1:
+            label = args[0]
+            value = kwargs.get("value")
+            delta = kwargs.get("delta")
+        elif len(args) == 2:
+            label, value = args
+            delta = kwargs.get("delta")
+        elif len(args) == 3:
+            label, value, delta = args
+        elif len(args) == 4:
+            label, value, delta, delta_color = args
+        elif len(args) == 5:
+            label, value, delta, delta_color, help = args
+        elif len(args) == 6:
+            label, value, delta, delta_color, help, label_visibility = args
+        else:
+            raise ValueError("Too many positional arguments, provide at most 6")
+
+        for kwarg in ["delta_color", "help", "label_visibility"]:
+            if eval(f"{kwarg} is not None"):
+                logger.warning(
+                    f"`{kwarg}` argument is not supported in Jupyter notebooks, but will be applied in Streamlit"
+                )
+
+        _plot_metric(label=label, value=value, delta=delta)
+
+    try:
+        import plotly.graph_objects as go
+
+        return wrapper
+    except ImportError:
+        msg = "plotly is not installed, falling back to default st.metric implementation\n"
+        msg += "To use plotly, run `pip install plotly`"
+        logger.warning(msg)
+        return func_to_decorate
+
+# %% ../nbs/01_core.ipynb 103
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""
@@ -424,6 +574,8 @@ def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
         "markdown": functools.partial(_st_type_check, allowed_types=str),
         "dataframe": functools.partial(_st_type_check, allowed_types=pd.DataFrame),
         "date_input": _st_date_input,
+        "text": _st_text,
+        "latex": _st_latex,
         "json": _st_json,
         "cache": _dummy_wrapper_noop,
         "expander": _st_expander,
@@ -438,4 +590,5 @@ def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
             _st_single_choice, jupyter_widget=widgets.Dropdown
         ),
         "multiselect": _st_multiselect,
+        "metric": _st_metric,
     }
