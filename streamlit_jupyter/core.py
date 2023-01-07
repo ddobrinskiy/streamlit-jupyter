@@ -47,11 +47,11 @@ class StreamlitPatcher:
         self.is_registered: bool = False
         self.registered_methods: tp.Set[str] = set()
 
-    def jupyter(self, verbose: bool = False):
+    def jupyter(self):
         """patches streamlit methods to display content in jupyter notebooks"""
         # patch streamlit methods from MAPPING property dict
         for method_name, wrapper in self.MAPPING.items():
-            self._wrap(method_name, wrapper, verbose=verbose)
+            self._wrap(method_name, wrapper)
 
         self.is_registered = True
 
@@ -60,13 +60,12 @@ class StreamlitPatcher:
         """get all streamlit methods"""
         return [attr for attr in dir(st) if not attr.startswith("_")]
 
-# %% ../nbs/01_core.ipynb 11
+# %% ../nbs/01_core.ipynb 9
 @patch_to(StreamlitPatcher, cls_method=False)
 def _wrap(
     cls,
     method_name: str,
     wrapper: tp.Callable,
-    verbose: bool = False,
 ) -> None:
     """make a streamlit method jupyter friendly
 
@@ -78,21 +77,11 @@ def _wrap(
         wrapper function to use
     """
     if IN_IPYTHON:  # only patch if in jupyter
-        if verbose:
-            if hasattr(wrapper, "__name__"):
-                print(
-                    f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper.__name__}'"
-                )
-            else:
-                print(
-                    f"wrapping 'st.{method_name}' with 'streamlit_jupyter.core.{wrapper}'"
-                )
-
         trg = getattr(st, method_name)  # get the streamlit method
         setattr(st, method_name, wrapper(trg))  # patch the method
         cls.registered_methods.add(method_name)  # add to registered methods
 
-# %% ../nbs/01_core.ipynb 16
+# %% ../nbs/01_core.ipynb 13
 def _display(arg: tp.Any) -> None:
     if isinstance(arg, str):
         IPython.display.display(IPython.display.Markdown(arg))
@@ -110,7 +99,7 @@ def _st_write(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 22
+# %% ../nbs/01_core.ipynb 19
 def _st_heading(func_to_decorate: tp.Callable, tag: str) -> tp.Callable:
     """Decorator to display objects passed to Streamlit in Jupyter notebooks."""
 
@@ -140,7 +129,7 @@ def _st_heading(func_to_decorate: tp.Callable, tag: str) -> tp.Callable:
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 29
+# %% ../nbs/01_core.ipynb 26
 def _st_caption(func_to_decorate):
     """Decorator to display json"""
 
@@ -159,7 +148,7 @@ def _st_caption(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 33
+# %% ../nbs/01_core.ipynb 30
 def _st_type_check(
     func_to_decorate: tp.Callable,
     allowed_types: tp.Union[tp.Type, tp.Collection[tp.Type]],
@@ -192,11 +181,11 @@ def _st_type_check(
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 37
+# %% ../nbs/01_core.ipynb 34
 def _jupyter_display_code(body: str, language: str = "python") -> None:
     _display(f"```{language}\n{body}\n```")
 
-# %% ../nbs/01_core.ipynb 39
+# %% ../nbs/01_core.ipynb 36
 def _st_code(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
@@ -215,7 +204,7 @@ def _st_code(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 48
+# %% ../nbs/01_core.ipynb 45
 def _st_text(func_to_decorate):
     """Decorator to display mono-spaced text"""
 
@@ -237,7 +226,7 @@ def _st_text(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 51
+# %% ../nbs/01_core.ipynb 48
 from IPython.display import Latex
 
 
@@ -263,7 +252,7 @@ def _st_latex(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 58
+# %% ../nbs/01_core.ipynb 55
 def _st_json(func_to_decorate):
     """Decorator to display json"""
 
@@ -295,7 +284,7 @@ def _st_json(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 68
+# %% ../nbs/01_core.ipynb 65
 def _dummy_wrapper_noop(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
@@ -303,7 +292,7 @@ def _dummy_wrapper_noop(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 74
+# %% ../nbs/01_core.ipynb 71
 class _DummyExpander:
     __doc__ = st.expander.__doc__
 
@@ -321,7 +310,7 @@ class _DummyExpander:
 def _st_expander(cls_to_replace: st.expander):
     return _DummyExpander
 
-# %% ../nbs/01_core.ipynb 78
+# %% ../nbs/01_core.ipynb 75
 def _st_text_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -349,7 +338,7 @@ def _st_text_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 83
+# %% ../nbs/01_core.ipynb 80
 def _st_date_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -377,7 +366,7 @@ def _st_date_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 89
+# %% ../nbs/01_core.ipynb 86
 def _st_checkbox(func_to_decorate):
     """Decorator to display checkbox in Jupyter notebooks."""
 
@@ -402,7 +391,7 @@ def _st_checkbox(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 94
+# %% ../nbs/01_core.ipynb 91
 def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     """Decorator to display single choice widget in Jupyter notebooks."""
@@ -432,7 +421,7 @@ def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 99
+# %% ../nbs/01_core.ipynb 96
 def _st_multiselect(func_to_decorate):
     """Decorator to display multiple choice widget in Jupyter notebooks."""
 
@@ -460,7 +449,7 @@ def _st_multiselect(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 104
+# %% ../nbs/01_core.ipynb 101
 def _plot_metric(*, label, value, delta=None, label_visibility="visible"):
     import plotly.graph_objects as go
 
@@ -563,7 +552,7 @@ def _st_metric(func_to_decorate):
         logger.warning(msg)
         return func_to_decorate
 
-# %% ../nbs/01_core.ipynb 111
+# %% ../nbs/01_core.ipynb 108
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""
