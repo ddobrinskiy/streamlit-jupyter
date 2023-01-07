@@ -196,7 +196,7 @@ def _st_type_check(
 def _jupyter_display_code(body: str, language: str = "python") -> None:
     _display(f"```{language}\n{body}\n```")
 
-# %% ../nbs/01_core.ipynb 38
+# %% ../nbs/01_core.ipynb 39
 def _st_code(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
@@ -215,7 +215,7 @@ def _st_code(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 45
+# %% ../nbs/01_core.ipynb 48
 def _st_text(func_to_decorate):
     """Decorator to display mono-spaced text"""
 
@@ -237,7 +237,7 @@ def _st_text(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 48
+# %% ../nbs/01_core.ipynb 51
 from IPython.display import Latex
 
 
@@ -263,7 +263,7 @@ def _st_latex(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 53
+# %% ../nbs/01_core.ipynb 58
 def _st_json(func_to_decorate):
     """Decorator to display json"""
 
@@ -295,7 +295,7 @@ def _st_json(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 62
+# %% ../nbs/01_core.ipynb 68
 def _dummy_wrapper_noop(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
@@ -303,7 +303,7 @@ def _dummy_wrapper_noop(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 68
+# %% ../nbs/01_core.ipynb 74
 class _DummyExpander:
     __doc__ = st.expander.__doc__
 
@@ -321,7 +321,7 @@ class _DummyExpander:
 def _st_expander(cls_to_replace: st.expander):
     return _DummyExpander
 
-# %% ../nbs/01_core.ipynb 72
+# %% ../nbs/01_core.ipynb 78
 def _st_text_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -349,7 +349,7 @@ def _st_text_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 77
+# %% ../nbs/01_core.ipynb 83
 def _st_date_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -377,7 +377,7 @@ def _st_date_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 83
+# %% ../nbs/01_core.ipynb 89
 def _st_checkbox(func_to_decorate):
     """Decorator to display checkbox in Jupyter notebooks."""
 
@@ -402,7 +402,7 @@ def _st_checkbox(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 88
+# %% ../nbs/01_core.ipynb 94
 def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     """Decorator to display single choice widget in Jupyter notebooks."""
@@ -432,7 +432,7 @@ def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 93
+# %% ../nbs/01_core.ipynb 99
 def _st_multiselect(func_to_decorate):
     """Decorator to display multiple choice widget in Jupyter notebooks."""
 
@@ -460,7 +460,7 @@ def _st_multiselect(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 98
+# %% ../nbs/01_core.ipynb 104
 def _plot_metric(*, label, value, delta=None, label_visibility="visible"):
     import plotly.graph_objects as go
 
@@ -561,7 +561,7 @@ def _st_metric(func_to_decorate):
         logger.warning(msg)
         return func_to_decorate
 
-# %% ../nbs/01_core.ipynb 103
+# %% ../nbs/01_core.ipynb 110
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""

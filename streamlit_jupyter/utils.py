@@ -7,20 +7,20 @@ __all__ = ['get_output', 'capture_cmd_output', 'test_md_output']
 from fastcore.test import test_eq, test_fail
 from IPython.utils.capture import capture_output
 
-# %% ../nbs/00_utils.ipynb 3
+# %% ../nbs/00_utils.ipynb 4
 def get_output(func, *args, **kwargs):
     with capture_output() as captured:
         func(*args, **kwargs)
         got = captured._outputs[0]["data"].get("text/markdown")
     return got
 
-# %% ../nbs/00_utils.ipynb 4
+# %% ../nbs/00_utils.ipynb 5
 def capture_cmd_output(cmd):
     with capture_output() as captured:
         eval(cmd)
     return captured
 
-# %% ../nbs/00_utils.ipynb 5
+# %% ../nbs/00_utils.ipynb 7
 def test_md_output(func, expected, *args, **kwargs):
     with capture_output() as captured:
         func(*args, **kwargs)
