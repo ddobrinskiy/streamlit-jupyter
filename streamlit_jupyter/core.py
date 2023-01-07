@@ -519,7 +519,9 @@ def _st_metric(func_to_decorate):
         for k, v in allowed_values.items():
             if not eval(f"{k} in v"):
                 got = eval(f"{k}")
-                raise ValueError(f"'{k}' must be one of {v}, got '{got}' instead")
+                raise ValueError(
+                    f"f'{got}' is not an accepted value. {k} only accepts: {v}"
+                )
 
         if len(args) == 0:
             label = kwargs.get("label")
