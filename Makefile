@@ -18,7 +18,7 @@ readme:
 	pipenv run nbdev_readme
 
 clean:
-	nbdev_clean
+	pipenv run nbdev_clean
 
 all: format export test readme clean
 

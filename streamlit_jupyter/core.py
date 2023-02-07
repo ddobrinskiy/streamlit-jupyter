@@ -18,7 +18,6 @@ import streamlit as st
 from fastcore.basics import in_ipython, listify, noop, patch, patch_to
 from fastcore.test import test_eq, test_fail
 from IPython.utils.capture import capture_output
-from nbdev.showdoc import show_doc
 
 from .utils import test_md_output
 
@@ -393,7 +392,6 @@ def _st_checkbox(func_to_decorate):
 
 # %% ../nbs/01_core.ipynb 91
 def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
-
     """Decorator to display single choice widget in Jupyter notebooks."""
 
     @functools.wraps(func_to_decorate)
