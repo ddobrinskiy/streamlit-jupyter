@@ -9,9 +9,10 @@ ipywidgets = "==7.7.2"
 jupyter = "*"
 streamlit = "*"
 tqdm = "*"
-stqdm = "*"
 tabulate = "*"
-streamlit-jupyter = "==0.1.7"
+streamlit-jupyter = "==0.1.7" # deploy only dep
+stqdm = "*"  # deploy only dep
+plotly = "*" # deploy only dep
 
 [dev-packages]
 black = "*"
