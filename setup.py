@@ -78,7 +78,6 @@ setup(
         "streamlit",
         "tqdm",
         "tabulate",
-        "streamlit-jupyter==0.1.7",
     ],
     extras_require={
         "dev": [
