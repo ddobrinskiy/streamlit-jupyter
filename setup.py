@@ -75,9 +75,10 @@ setup(
         "fastcore",
         "ipywidgets==7.7.2",
         "jupyter",
+        "stqdm",
         "streamlit",
-        "tqdm",
         "tabulate",
+        "tqdm",
     ],
     extras_require={
         "dev": [
@@ -90,7 +91,6 @@ setup(
             "pipenv-setup==3.2.0",
             "pre-commit",
             "vistir==0.6.1",
-            "stqdm",
         ],
     },
     dependency_links=[],

@@ -7,9 +7,10 @@ name = "pypi"
 fastcore = "*"
 ipywidgets = "==7.7.2"
 jupyter = "*"
+stqdm = "*"
 streamlit = "*"
-tqdm = "*"
 tabulate = "*"
+tqdm = "*"
 
 [dev-packages]
 black = "*"
@@ -21,7 +22,6 @@ nbqa = "*"
 pipenv-setup = "==3.2.0"
 pre-commit = "*"
 vistir = "==0.6.1"
-stqdm = "*"
 
 [requires]
 python_version = "3.8"
