@@ -18,9 +18,15 @@ readme:
 	pipenv run nbdev_readme
 
 clean:
-	nbdev_clean
+	pipenv run nbdev_clean
 
 all: format export test readme clean
 
 docs:
 	pipenv run nbdev_docs
+
+bump:
+	pipenv run nbdev_bump_version
+
+pypi:
+	pipenv run nbdev_pypi
