@@ -25,7 +25,9 @@ pip install streamlit_jupyter
 
 ## How to use
 
-Take a look at our [example notebook](./examples/99_example.ipynb)
+Take a look at our [example notebook](./examples/99_example.ipynb),
+streamlit version runs
+[here](https://ddobrinskiy-jupyter.streamlit.app/)
 
 The main idea is for you do experiment and develop in your notebook,
 visually see all the pieces, and then convert the notebook to `.py` to
