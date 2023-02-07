@@ -10,7 +10,7 @@ jupyter = "*"
 streamlit = "*"
 tqdm = "*"
 tabulate = "*"
-streamlit-jupyter = "==0.1.16"
+streamlit-jupyter = "==0.1.6"
 
 [dev-packages]
 black = "*"
