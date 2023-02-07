@@ -24,3 +24,6 @@ all: format export test readme clean
 
 docs:
 	pipenv run nbdev_docs
+
+pypi:
+	pipenv run nbdev_pypi
