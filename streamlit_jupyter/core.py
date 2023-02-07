@@ -540,6 +540,13 @@ def _st_metric(func_to_decorate):
 
         _plot_metric(label=label, value=value, delta=delta)
 
+    @functools.wraps(func_to_decorate)
+    def _original_func_with_added_warning(*args, **kwargs):
+        msg = "plotly is not installed, falling back to default st.metric implementation\n"
+        msg += "To use plotly, run `pip install plotly`"
+        logger.warning(msg)
+        _display(f"`st.metric widget (this will work as expected in streamlit)`")
+
     try:
         import plotly.graph_objects as go
 
@@ -548,7 +555,7 @@ def _st_metric(func_to_decorate):
         msg = "plotly is not installed, falling back to default st.metric implementation\n"
         msg += "To use plotly, run `pip install plotly`"
         logger.warning(msg)
-        return func_to_decorate
+        return _original_func_with_added_warning
 
 # %% ../nbs/01_core.ipynb 108
 @patch_to(StreamlitPatcher, as_prop=True)
