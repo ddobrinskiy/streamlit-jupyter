@@ -11,6 +11,9 @@ stqdm = "*"
 streamlit = "*"
 tabulate = "*"
 tqdm = "*"
+streamlit-jupyter = "==0.1.10" # deploy only dep
+plotly = "*"
+
 
 [dev-packages]
 black = "*"

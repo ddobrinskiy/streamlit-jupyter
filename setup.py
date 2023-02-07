@@ -79,6 +79,8 @@ setup(
         "streamlit",
         "tabulate",
         "tqdm",
+        "streamlit-jupyter==0.1.10",
+        "plotly",
     ],
     extras_require={
         "dev": [
