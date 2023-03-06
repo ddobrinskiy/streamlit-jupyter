@@ -91,7 +91,7 @@ setup(
             "pipenv-setup==3.2.0",
             "pre-commit",
             "vistir==0.6.1",
-            "packaging==21.3",
+            "packaging~=20.0",
             "build",
             "twine",
         ],
