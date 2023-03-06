@@ -9,9 +9,9 @@ repos:
     rev: 1.5.3
     hooks:
       - id: nbqa-black
-        exclude: "_proc/.*"
+        exclude: ^(_proc/.*|examples/)
       - id: nbqa-isort
-        exclude: "_proc/.*"
+        exclude: ^(_proc/.*|examples/)
 
   - repo: https://github.com/Madoshakalaka/pipenv-setup
     rev: v3.2.0

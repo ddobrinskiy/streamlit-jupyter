@@ -39,7 +39,7 @@ import time
 import pandas as pd
 
 
-@st.cache(suppress_st_warning=True)
+@st.cache_data()
 def get_data(date):
     for i in tqdm(range(10)):
         time.sleep(0.1)
@@ -50,6 +50,22 @@ def get_data(date):
 
 df = get_data(date)
 st.write(df)
+
+# %% 99_example.ipynb 12
+@st.cache_resource(ttl=3600)
+def get_resource():
+    st.write("Getting resource...")
+    for i in tqdm(range(5)):
+        time.sleep(0.1)
+    return {
+        "foo": "bar",
+        "baz": [1, 2, 3],
+        "qux": {"a": 1, "b": 2, "c": 3},
+    }
+
+
+records = get_resource()
+st.json(records)
 
 # %% 99_example.ipynb 14
 import plotly.express as px
@@ -62,32 +78,35 @@ st.write(fig)
 st.metric("Speed", 300, 210, delta_color="normal", label_visibility="visible")
 
 # %% 99_example.ipynb 16
-st.code("print(1+1)", language="python")
+st.metric("Speed", 300, 210)
 
 # %% 99_example.ipynb 17
-show_code = st.checkbox("Show code", value=True)
+st.code("print(1+1)", language="python")
 
 # %% 99_example.ipynb 18
+show_code = st.checkbox("Show code", value=True)
+
+# %% 99_example.ipynb 19
 if show_code:
     st.code("[i**2 for i in range(100)]")
 
-# %% 99_example.ipynb 19
+# %% 99_example.ipynb 20
 option = st.radio("Choose one option", options=["foo", "bar"], index=1)
 
-# %% 99_example.ipynb 20
+# %% 99_example.ipynb 21
 option = st.selectbox("Selectbox: ", options=["Jane", "Bob", "Alice"], index=0)
 
-# %% 99_example.ipynb 21
+# %% 99_example.ipynb 22
 options = st.multiselect("Multiselect: ", options=["python", "golang", "julia", "rust"])
 
-# %% 99_example.ipynb 22
+# %% 99_example.ipynb 23
 options = st.multiselect(
     "Multiselect with defaults: ",
     options=["nbdev", "streamlit", "jupyter", "fastcore"],
     default=["jupyter", "streamlit"],
 )
 
-# %% 99_example.ipynb 23
+# %% 99_example.ipynb 24
 st.subheader("st.text:")
 st.text("This is a text")
 st.text("This is \n multiline text")

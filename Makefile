@@ -1,6 +1,6 @@
 format:
-	pipenv run nbqa black nbs/
-	pipenv run nbqa isort nbs/
+	pipenv run nbqa black nbs/ examples/
+	pipenv run nbqa isort nbs/ examples/
 
 lint:
 	pipenv run nbqa mypy nbs/ --ignore-missing-imports --check-untyped-defs
@@ -30,3 +30,7 @@ bump:
 
 pypi:
 	pipenv run nbdev_pypi
+
+example:
+	pipenv run streamlit run examples/example.py
+
