@@ -82,7 +82,7 @@ setup(
     ],
     extras_require={
         "dev": [
-            "black==23.1.0",
+            "black",
             "ipykernel",
             "isort",
             "mypy",

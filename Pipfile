@@ -13,7 +13,7 @@ tabulate = "*"
 tqdm = "*"
 
 [dev-packages]
-black = "==23.1.0"
+black = "*"
 ipykernel = "*"
 isort = "*"
 mypy = "*"
