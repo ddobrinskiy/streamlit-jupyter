@@ -76,7 +76,7 @@ setup(
         "ipywidgets==7.7.2",
         "jupyter",
         "stqdm",
-        "streamlit",
+        "streamlit<1.18",
         "tabulate",
         "tqdm",
     ],
