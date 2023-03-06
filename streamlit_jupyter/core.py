@@ -291,7 +291,7 @@ def _dummy_wrapper_noop(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 71
+# %% ../nbs/01_core.ipynb 73
 class _DummyExpander:
     __doc__ = st.expander.__doc__
 
@@ -309,7 +309,7 @@ class _DummyExpander:
 def _st_expander(cls_to_replace: st.expander):
     return _DummyExpander
 
-# %% ../nbs/01_core.ipynb 75
+# %% ../nbs/01_core.ipynb 77
 def _st_text_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -337,7 +337,7 @@ def _st_text_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 80
+# %% ../nbs/01_core.ipynb 82
 def _st_date_input(func_to_decorate):
     """Decorator to display date input in Jupyter notebooks."""
 
@@ -365,7 +365,7 @@ def _st_date_input(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 86
+# %% ../nbs/01_core.ipynb 88
 def _st_checkbox(func_to_decorate):
     """Decorator to display checkbox in Jupyter notebooks."""
 
@@ -390,7 +390,7 @@ def _st_checkbox(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 91
+# %% ../nbs/01_core.ipynb 93
 def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
     """Decorator to display single choice widget in Jupyter notebooks."""
 
@@ -419,7 +419,7 @@ def _st_single_choice(func_to_decorate, jupyter_widget: widgets.Widget):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 96
+# %% ../nbs/01_core.ipynb 98
 def _st_multiselect(func_to_decorate):
     """Decorator to display multiple choice widget in Jupyter notebooks."""
 
@@ -447,7 +447,7 @@ def _st_multiselect(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 101
+# %% ../nbs/01_core.ipynb 103
 def _plot_metric(*, label, value, delta=None, label_visibility="visible"):
     import plotly.graph_objects as go
 
@@ -550,7 +550,7 @@ def _st_metric(func_to_decorate):
 
     return wrapper
 
-# %% ../nbs/01_core.ipynb 108
+# %% ../nbs/01_core.ipynb 110
 @patch_to(StreamlitPatcher, as_prop=True)
 def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
     """mapping of streamlit methods to their jupyter friendly versions"""
@@ -567,6 +567,8 @@ def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
         "latex": _st_latex,
         "json": _st_json,
         "cache": _dummy_wrapper_noop,
+        "cache_data": _dummy_wrapper_noop,
+        "cache_resource": _dummy_wrapper_noop,
         "expander": _st_expander,
         "text_input": _st_text_input,
         "text_area": _st_text_input,
