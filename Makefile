@@ -32,5 +32,5 @@ pypi:
 	pipenv run nbdev_pypi
 
 example:
-	pipenv run streamlit run examples/example.py
+	pipenv run streamlit run examples/example.py --server.runOnSave true
 

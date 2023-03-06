@@ -38,13 +38,15 @@ import time
 
 import pandas as pd
 
+st.subheader("A cached dataframe")
+
 
 @st.cache_data()
 def get_data(date):
     for i in tqdm(range(10)):
         time.sleep(0.1)
     return pd.DataFrame(
-        {"date": pd.date_range(date, periods=3), "c": [7, 8, 5], "d": [10, 11, 3]}
+        {"date": pd.date_range(date, periods=3), "c": [7, 8, 5], "d": [10, 11, 7]}
     ).set_index("date")
 
 
@@ -52,6 +54,32 @@ df = get_data(date)
 st.write(df)
 
 # %% 99_example.ipynb 12
+st.subheader("Data Editor")
+df = pd.DataFrame(
+    [
+        {
+            "command": "st.selectbox",
+            "rating": 4,
+            "is_widget": True,
+        },
+        {
+            "command": "st.balloons",
+            "rating": 5,
+            "is_widget": False,
+        },
+        {
+            "command": "st.time_input",
+            "rating": 3,
+            "is_widget": True,
+        },
+    ]
+)
+edited_df = st.experimental_data_editor(df)
+
+# %% 99_example.ipynb 13
+st.subheader("One more cache example")
+
+
 @st.cache_resource(ttl=3600)
 def get_resource():
     st.write("Getting resource...")
@@ -67,46 +95,48 @@ def get_resource():
 records = get_resource()
 st.json(records)
 
-# %% 99_example.ipynb 14
+# %% 99_example.ipynb 15
+st.subheader("Ploting")
+
 import plotly.express as px
 
 df_daily = df.mean(axis="columns").rename("daily_average")
 fig = px.line(df_daily, title="Daily mean", width=600)
 st.write(fig)
 
-# %% 99_example.ipynb 15
+# %% 99_example.ipynb 16
 st.metric("Speed", 300, 210, delta_color="normal", label_visibility="visible")
 
-# %% 99_example.ipynb 16
+# %% 99_example.ipynb 17
 st.metric("Speed", 300, 210)
 
-# %% 99_example.ipynb 17
+# %% 99_example.ipynb 18
 st.code("print(1+1)", language="python")
 
-# %% 99_example.ipynb 18
+# %% 99_example.ipynb 19
 show_code = st.checkbox("Show code", value=True)
 
-# %% 99_example.ipynb 19
+# %% 99_example.ipynb 20
 if show_code:
     st.code("[i**2 for i in range(100)]")
 
-# %% 99_example.ipynb 20
+# %% 99_example.ipynb 21
 option = st.radio("Choose one option", options=["foo", "bar"], index=1)
 
-# %% 99_example.ipynb 21
+# %% 99_example.ipynb 22
 option = st.selectbox("Selectbox: ", options=["Jane", "Bob", "Alice"], index=0)
 
-# %% 99_example.ipynb 22
+# %% 99_example.ipynb 23
 options = st.multiselect("Multiselect: ", options=["python", "golang", "julia", "rust"])
 
-# %% 99_example.ipynb 23
+# %% 99_example.ipynb 24
 options = st.multiselect(
     "Multiselect with defaults: ",
     options=["nbdev", "streamlit", "jupyter", "fastcore"],
     default=["jupyter", "streamlit"],
 )
 
-# %% 99_example.ipynb 24
+# %% 99_example.ipynb 25
 st.subheader("st.text:")
 st.text("This is a text")
 st.text("This is \n multiline text")
