@@ -5,3 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps: [uses: fastai/workflows/nbdev-ci@master]
+  pypi:
+    runs-on: ubuntu-latest
+    needs: test
+    steps: [uses: fastai/workflows/nbdev-pypi@master]
