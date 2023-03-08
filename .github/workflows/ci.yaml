@@ -9,12 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: "setup tea"
-      uses: teaxyz/setup@v0
+    - uses: teaxyz/setup@v0
     - name: test
       run: |
-        pip install nbdev
-        nbdev_test
+        which pip
+        tea which pip
+        tea pip install nbdev
+        tea nbdev_test
   # pypi:
   #   runs-on: ubuntu-latest
   #   needs: test
