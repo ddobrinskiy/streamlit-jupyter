@@ -13,7 +13,7 @@ jobs:
       uses: teaxyz/setup@v0
     - name: test
       run: |
-        pip install -e .
+        pip install nbdev
         nbdev_test
   # pypi:
   #   runs-on: ubuntu-latest
