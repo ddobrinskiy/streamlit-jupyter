@@ -12,10 +12,8 @@ jobs:
     - uses: teaxyz/setup@v0
     - name: test
       run: |
-        which pip
-        tea which pip
-        tea pip install nbdev
-        tea nbdev_test
+        pip install -e .[dev]
+        nbdev_test
   # pypi:
   #   runs-on: ubuntu-latest
   #   needs: test
