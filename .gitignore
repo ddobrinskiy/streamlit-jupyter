@@ -130,3 +130,6 @@ dmypy.json
 _proc
 _docs
 .last_checked
+
+# other stuff
+.vscode
