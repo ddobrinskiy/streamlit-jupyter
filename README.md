@@ -5,8 +5,9 @@ streamlit-jupyter
 
 <img src="./images/logo.png" width=99%>
 
-[<img src="https://github.com/ddobrinskiy/streamlit-jupyter/actions/workflows/test.yaml/badge.svg">](https://github.com/ddobrinskiy/streamlit-jupyter/actions)
-[![Streamlit
+[![CI
+Badge](https://github.com/ddobrinskiy/streamlit-jupyter/actions/workflows/test.yaml/badge.svg)](https://github.com/ddobrinskiy/streamlit-jupyter/actions)
+[![Open Streamlit
 App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ddobrinskiy-jupyter.streamlit.app/)
 
 ## Docs & links
