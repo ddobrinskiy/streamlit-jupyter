@@ -100,7 +100,7 @@ st.subheader("Ploting")
 
 import plotly.express as px
 
-df_daily = df.mean(axis="columns").rename("daily_average")
+df_daily = df[["rating"]].mean(axis="columns").rename("daily_average")
 fig = px.line(df_daily, title="Daily mean", width=600)
 st.write(fig)
 
