@@ -134,3 +134,4 @@ _docs
 # other stuff
 .vscode
 Pipfile.lock
+venv_*
