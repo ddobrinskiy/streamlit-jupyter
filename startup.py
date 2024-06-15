@@ -1,19 +1,19 @@
 def hello_world():
-    print('may')
+    print('jun')
     print('hello world')
 
 def calculate_sum(a, b):
-    print('may')
+    print('jun')
     return a + b + 1
 
 def greet_user(name):
-    print('may')
+    print('jun')
     print(f"Welcome, {name}!")
 
 def is_even(number):
-    print('may')
+    print('jun')
     return number % 2 == 0
 
 def reverse_string(text):
-    print('may')
+    print('jun')
     return text[::-1]
