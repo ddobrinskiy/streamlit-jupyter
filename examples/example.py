@@ -74,7 +74,7 @@ df = pd.DataFrame(
         },
     ]
 )
-edited_df = st.experimental_data_editor(df)
+edited_df = st.data_editor(df)
 
 # %% 99_example.ipynb 13
 st.subheader("One more cache example")
@@ -95,7 +95,7 @@ def get_resource():
 records = get_resource()
 st.json(records)
 
-# %% 99_example.ipynb 15
+# %% 99_example.ipynb 14
 st.subheader("Ploting")
 
 import plotly.express as px
@@ -104,39 +104,39 @@ df_daily = df[["rating"]].mean(axis="columns").rename("daily_average")
 fig = px.line(df_daily, title="Daily mean", width=600)
 st.write(fig)
 
-# %% 99_example.ipynb 16
+# %% 99_example.ipynb 15
 st.metric("Speed", 300, 210, delta_color="normal", label_visibility="visible")
 
-# %% 99_example.ipynb 17
+# %% 99_example.ipynb 16
 st.metric("Speed", 300, 210)
 
-# %% 99_example.ipynb 18
+# %% 99_example.ipynb 17
 st.code("print(1+1)", language="python")
 
-# %% 99_example.ipynb 19
+# %% 99_example.ipynb 18
 show_code = st.checkbox("Show code", value=True)
 
-# %% 99_example.ipynb 20
+# %% 99_example.ipynb 19
 if show_code:
     st.code("[i**2 for i in range(100)]")
 
-# %% 99_example.ipynb 21
+# %% 99_example.ipynb 20
 option = st.radio("Choose one option", options=["foo", "bar"], index=1)
 
-# %% 99_example.ipynb 22
+# %% 99_example.ipynb 21
 option = st.selectbox("Selectbox: ", options=["Jane", "Bob", "Alice"], index=0)
 
-# %% 99_example.ipynb 23
+# %% 99_example.ipynb 22
 options = st.multiselect("Multiselect: ", options=["python", "golang", "julia", "rust"])
 
-# %% 99_example.ipynb 24
+# %% 99_example.ipynb 23
 options = st.multiselect(
     "Multiselect with defaults: ",
     options=["nbdev", "streamlit", "jupyter", "fastcore"],
     default=["jupyter", "streamlit"],
 )
 
-# %% 99_example.ipynb 25
+# %% 99_example.ipynb 24
 st.subheader("st.text:")
 st.text("This is a text")
 st.text("This is \n multiline text")
