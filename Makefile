@@ -12,7 +12,7 @@ export:
 	pipenv run nbdev_export 
 
 pipenv-setup:
-	pipenv run pipenv-setup sync --pipfile --dev
+	pipenv sync --pipfile --dev
 
 readme:
 	pipenv run nbdev_readme

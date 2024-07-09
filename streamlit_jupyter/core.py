@@ -562,9 +562,7 @@ def MAPPING(cls) -> tp.Dict[str, tp.Callable]:
         "caption": _st_caption,
         "markdown": functools.partial(_st_type_check, allowed_types=str),
         "dataframe": functools.partial(_st_type_check, allowed_types=pd.DataFrame),
-        "experimental_data_editor": functools.partial(
-            _st_type_check, allowed_types=pd.DataFrame
-        ),
+        "data_editor": functools.partial(_st_type_check, allowed_types=pd.DataFrame),
         "date_input": _st_date_input,
         "text": _st_text,
         "latex": _st_latex,

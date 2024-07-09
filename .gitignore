@@ -133,3 +133,4 @@ _docs
 
 # other stuff
 .vscode
+Pipfile.lock
