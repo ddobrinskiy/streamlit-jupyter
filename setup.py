@@ -73,7 +73,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "fastcore",
-        "ipywidgets==7.7.2",
+        "ipywidgets>=8",
         "jupyter",
         "stqdm",
         "streamlit>=1.19",
