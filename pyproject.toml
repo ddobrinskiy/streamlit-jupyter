@@ -1,0 +1,32 @@
+[project]
+name="streamlit-jupyter"
+version = "0.3.1"
+description = "Simple Python package to preview and develop streamlit apps in jupyter notebooks"
+readme = "README.md"
+requires-python=">=3.8"
+dependencies = [
+    "fastcore",
+    "ipywidgets>=8.0.0,<9.0.0",
+    "jupyter",
+    "stqdm",
+    "streamlit>=1.19",
+    "tabulate",
+    "tqdm",
+]
+
+[dependency-groups]
+dev = [
+    "black",
+    "ipykernel",
+    "isort",
+    "mypy",
+    "nbdev",
+    "nbqa",
+    "pipenv-setup==3.2.0",
+    "plotly>=5.0.0",
+    "pre-commit",
+    "vistir==0.6.1",
+    "packaging~=20.0",
+    "build",
+    "twine",
+]
