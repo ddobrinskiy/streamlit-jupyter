@@ -71,7 +71,7 @@ on each method
 | `st.date_input` | Display a date input widget. |
 | `st.expander` | Insert a multi-element container that can be expanded/collapsed. |
 | `st.header` | Display text in header formatting. |
-| `st.json` | Display object or string as a pretty-printed JSON string. |
+| `st.json` | Display an object or string as a pretty-printed, interactive JSON string. |
 | `st.latex` | Display mathematical expressions formatted as LaTeX. |
 | `st.markdown` | Display string formatted as Markdown. |
 | `st.metric` | Display a metric in big bold font, with an optional indicator of how the metric changed. |
@@ -81,9 +81,9 @@ on each method
 | `st.subheader` | Display text in subheader formatting. |
 | `st.text_area` | Display a multi-line text input widget. |
 | `st.text_input` | Display a single-line text input widget. |
-| `st.text` | Write fixed-width and preformatted text. |
+| `st.text` | Write text without Markdown or HTML parsing. |
 | `st.title` | Display text in title formatting. |
-| `st.write` | Write arguments to the app. |
+| `st.write` | Displays arguments in the app. |
 
 ## Currently **un**supported methods
 
