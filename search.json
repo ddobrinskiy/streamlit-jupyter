@@ -1,0 +1,102 @@
+[
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "Calling tqdm as tqdm.notebook or stqdm depending on environment\n\nsource",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#modifying-streamlit",
+    "href": "core.html#modifying-streamlit",
+    "title": "core",
+    "section": "Modifying streamlit",
+    "text": "Modifying streamlit\nThe way we will modify streamlit methods is by putting them through a decorator. This decorator will check if we are in a jupyter notebook, and if so, it will take the input and display it in the notebook.\nElse it will use the original streamlit method.\n\nst.write\n\nsp._wrap(\"write\", _st_write)\n\nwith capture_output() as cap:\n    st.write(\"hello\")\n    got = cap._outputs[0][\"data\"]\n\nexpected = {\n    \"text/plain\": \"&lt;IPython.core.display.Markdown object&gt;\",\n    \"text/markdown\": \"hello\",\n}\nassert got == expected, \"check that the output is correct\"\n\nst.write(\"hello\")\n\nhello\n\n\n\nst.write(\"This is **bold** text in markdown\")\n\nThis is bold text in markdown\n\n\n\ntry:\n    df = pd.DataFrame({\"a\": [1, 2, 3], \"b\": [4, 5, 6]})\n    st.write(df)\nexcept ImportError:\n    logger.warning(\"Pandas not installed, skipping test\")\n\n\n\n\n\n\n\n\na\nb\n\n\n\n\n0\n1\n4\n\n\n1\n2\n5\n\n\n2\n3\n6\n\n\n\n\n\n\n\n\nassert sp.registered_methods == {\"write\"}, \"check that the method is registered\"\n\n\n\npatching headings\n\nst.title\nst.header\nst.subheader\n\n\nsp = StreamlitPatcher()\nsp._wrap(\"title\", functools.partial(_st_heading, tag=\"#\"))\nsp._wrap(\"header\", functools.partial(_st_heading, tag=\"##\"))\nsp._wrap(\"subheader\", functools.partial(_st_heading, tag=\"###\"))\n\n\nwith capture_output() as cap:\n    st.title(\"foo\")\n    got = cap._outputs[0][\"data\"][\"text/markdown\"]\n\ntest_eq(got, \"# foo\")\n\n\nwith capture_output() as cap:\n    st.header(\"foo\")\n    got = cap._outputs[0][\"data\"][\"text/markdown\"]\n\ntest_eq(got, \"## foo\")\n\n\nwith capture_output() as cap:\n    st.subheader(\"foo\")\n    got = cap._outputs[0][\"data\"][\"text/markdown\"]\n\ntest_eq(got, \"### foo\")\n\n\n# these should fail\n\ntest_fail(lambda: st.title(df), contains=\"Unsupported type\")\ntest_fail(lambda: st.header(df), contains=\"Unsupported type\")\ntest_fail(lambda: st.subheader(df), contains=\"Unsupported type\")\ntest_fail(lambda: st.subheader(1), contains=\"Unsupported type\")\n\n\n\nst.caption\n\nst.caption(\"This is a string that explains something above.\")\nst.caption(\"A caption with _italics_ :blue[colors] and emojis :sunglasses:\")\nst.caption(\"A caption with \\n newlines\")\n\n\nThis is a string that explains something above.\n\n\n\n\nA caption with italics :blue[colors] and emojis :sunglasses:\n\n\n\n\nA caption with newlines\n\n\n\n\n\npatch some methods to simply display the input in jupyter\n\nsp._wrap(\"markdown\", functools.partial(_st_type_check, allowed_types=str))\n\ntest_fail(lambda: st.markdown(df), contains=\"Unsupported type\")\nst.markdown(\"This is **bold** text in markdown\")\n\nThis is bold text in markdown\n\n\n\nsp._wrap(\"dataframe\", functools.partial(_st_type_check, allowed_types=pd.DataFrame))\ntest_fail(lambda: st.dataframe(\"foo\"), contains=\"Unsupported type\")\nst.dataframe(df)\n\n\n\n\n\n\n\n\na\nb\n\n\n\n\n0\n1\n4\n\n\n1\n2\n5\n\n\n2\n3\n6\n\n\n\n\n\n\n\n\n\nst.code\n\nst.code(\n    \"\"\"\ndef foo():\n    print('hello')\n\"\"\"\n)\n\n\ndef foo():\n    print('hello')\n\n\n\nst.code(\"grep -r 'foo' .\", language=None)\n\ngrep -r 'foo' .\n\n\n\n\nst.text\n\n\nst.latex\n\nsp._wrap(\"latex\", _st_latex)  # |hide_line\nst.latex(r\"E=mc^2\")\n\n\\[\\begin{equation}E=mc^2\\end{equation}\\]\n\n\n\nst.latex(\n    r\"\"\"a + ar + a r^2 + a r^3 + \\cdots + a r^{n-1} =\n        \\sum_{k=0}^{n-1} ar^k =\n        a \\left(\\frac{1-r^{n}}{1-r}\\right)\n\"\"\"\n)\n\n\\[\\begin{equation}a + ar + a r^2 + a r^3 + \\cdots + a r^{n-1} =\n        \\sum_{k=0}^{n-1} ar^k =\n        a \\left(\\frac{1-r^{n}}{1-r}\\right)\n\\end{equation}\\]\n\n\n\n\nst.json\nTesting output of st.json with dict\n\nbody = {\"foo\": \"bar\", \"baz\": [1, 2, 3]}\nexpected = '```json\\n{\\n  \"foo\": \"bar\",\\n  \"baz\": [\\n    1,\\n    2,\\n    3\\n  ]\\n}\\n```'  # |hide_line\ntest_md_output(st.json, expected, body)  # |hide_line\nst.json(body)\n\n{\n  \"foo\": \"bar\",\n  \"baz\": [\n    1,\n    2,\n    3\n  ]\n}\n\n\n\nbody = {\"foo\": \"bar\", \"baz\": [1, 2, 3]}\nexpected = '```json\\n{\"foo\": \"bar\", \"baz\": [1, 2, 3]}\\n```'  # |hide_line\ntest_md_output(st.json, expected, body, expanded=False)  # |hide_line\nst.json(body, expanded=False)\n\n{\"foo\": \"bar\", \"baz\": [1, 2, 3]}\n\n\nTesting output of st.json with str\n\nbody = '{\"foo\": \"bar\", \"baz\": [1,2,3]}'\nexpected = '```json\\n{\\n  \"foo\": \"bar\",\\n  \"baz\": [\\n    1,\\n    2,\\n    3\\n  ]\\n}\\n```'  # |hide_line\ntest_md_output(st.json, expected, body)  # |hide_line\nst.json(body)\n\n{\n  \"foo\": \"bar\",\n  \"baz\": [\n    1,\n    2,\n    3\n  ]\n}\n\n\n\nbody = '{\"foo\": \"bar\", \"baz\": [1,2,3]}'\nexpected = '```json\\n{\"foo\": \"bar\", \"baz\": [1,2,3]}\\n```'  # |hide_line\ntest_md_output(st.json, expected, body, expanded=False)  # |hide_line\nst.json(body, expanded=False)\n\n{\"foo\": \"bar\", \"baz\": [1,2,3]}\n\n\n\n\nst.cache, st.cache_data, st.cache_resource\nThe streamlitcache method is used to cache the output of a function. This is useful for functions that take a long time to run, and we want to avoid running them every time we run the app.\nIf we are in a jupyter notebook, we can’t use the streamlitcache method, so we will replace the streamlitcache method with a dummy method that does nothing.\n\nsp._wrap(\"cache\", _dummy_wrapper_noop)\nsp._wrap(\"cache_data\", _dummy_wrapper_noop)\nsp._wrap(\"cache_resource\", _dummy_wrapper_noop)\n\n\n# verify that during patching we didn't change the name or docstring\nassert st.cache.__name__ == \"cache\"\nassert \"@st.cache\" in tp.cast(\n    str, st.cache.__doc__\n), \"check that the docstring is correct\"\n\n\n# test caching\n@st.cache_data()\ndef get_data():\n    st.write(\"Getting data...\")\n    for i in tqdm(range(5)):\n        time.sleep(0.1)\n    return pd.DataFrame({\"c\": [7, 8, 9], \"d\": [10, 11, 12]})\n\n\ndf = get_data()\nst.write(df)\n\nGetting data…\n\n\n\n\n\n\n\n\n\n\n\n\nc\nd\n\n\n\n\n0\n7\n10\n\n\n1\n8\n11\n\n\n2\n9\n12\n\n\n\n\n\n\n\n\n# test that the cache in jupyter does not affect get_data\n\ndf = get_data()\nwith capture_output() as cap:\n    st.write(df)\n    got = cap._outputs[0][\"data\"]\n\nexpected = {\n    \"text/plain\": \"   c   d\\n0  7  10\\n1  8  11\\n2  9  12\",\n    \"text/html\": '&lt;div&gt;\\n&lt;style scoped&gt;\\n    .dataframe tbody tr th:only-of-type {\\n        vertical-align: middle;\\n    }\\n\\n    .dataframe tbody tr th {\\n        vertical-align: top;\\n    }\\n\\n    .dataframe thead th {\\n        text-align: right;\\n    }\\n&lt;/style&gt;\\n&lt;table border=\"1\" class=\"dataframe\"&gt;\\n  &lt;thead&gt;\\n    &lt;tr style=\"text-align: right;\"&gt;\\n      &lt;th&gt;&lt;/th&gt;\\n      &lt;th&gt;c&lt;/th&gt;\\n      &lt;th&gt;d&lt;/th&gt;\\n    &lt;/tr&gt;\\n  &lt;/thead&gt;\\n  &lt;tbody&gt;\\n    &lt;tr&gt;\\n      &lt;th&gt;0&lt;/th&gt;\\n      &lt;td&gt;7&lt;/td&gt;\\n      &lt;td&gt;10&lt;/td&gt;\\n    &lt;/tr&gt;\\n    &lt;tr&gt;\\n      &lt;th&gt;1&lt;/th&gt;\\n      &lt;td&gt;8&lt;/td&gt;\\n      &lt;td&gt;11&lt;/td&gt;\\n    &lt;/tr&gt;\\n    &lt;tr&gt;\\n      &lt;th&gt;2&lt;/th&gt;\\n      &lt;td&gt;9&lt;/td&gt;\\n      &lt;td&gt;12&lt;/td&gt;\\n    &lt;/tr&gt;\\n  &lt;/tbody&gt;\\n&lt;/table&gt;\\n&lt;/div&gt;',\n}\n\nassert got == expected, \"check that the output is correct\"\n\nGetting data…\n\n\n\n\n\n\n# test caching\n@st.cache_resource(ttl=3600)\ndef get_resource():\n    st.write(\"Getting resource...\")\n    for i in tqdm(range(5)):\n        time.sleep(0.1)\n    return {\n        \"foo\": \"bar\",\n        \"baz\": [1, 2, 3],\n        \"qux\": {\"a\": 1, \"b\": 2, \"c\": 3},\n    }\n\n\nexpected = {\n    \"foo\": \"bar\",\n    \"baz\": [1, 2, 3],\n    \"qux\": {\"a\": 1, \"b\": 2, \"c\": 3},\n}\n\ngot = get_resource()\nassert got == expected, \"check that the output is correct\"\n\nGetting resource…\n\n\n\n\n\n\n# test that the cache in jupyter does not affect get_data\n\nrecords = get_resource()\nwith capture_output() as cap:\n    st.write(records)\n    got = cap._outputs[0][\"data\"]\n\nexpected = {\n    \"text/plain\": \"{'foo': 'bar', 'baz': [1, 2, 3], 'qux': {'a': 1, 'b': 2, 'c': 3}}\"\n}\n\nassert got == expected, \"check that the output is correct\"\n\nGetting resource…\n\n\n\n\n\n\n\nst.expander\nNote that this will be an exception from the usual wrapper logic.\nSince st.expander is used as a context manager, we replace it with a dummy class that displays the input in jupyter.\n\nsp._wrap(\"expander\", _st_expander)\n\n\nwith st.expander(\"Expand me!\", expanded=False):\n    st.markdown(\n        \"\"\"\nThe **#30DaysOfStreamlit** is a coding challenge designed to help you get started in building Streamlit apps.\n\nParticularly, you'll be able to:\n- Set up a coding environment for building Streamlit apps\n- Build your first Streamlit app\n- Learn about all the awesome input/output widgets to use for your Streamlit app\n    \"\"\"\n    )\n\n    st.write(\"**More text, we can expand as many streamlit elements as we want**\")\n\n\nexpander starts: Expand me!\n\n\n\nThe #30DaysOfStreamlit is a coding challenge designed to help you get started in building Streamlit apps.\nParticularly, you’ll be able to: - Set up a coding environment for building Streamlit apps - Build your first Streamlit app - Learn about all the awesome input/output widgets to use for your Streamlit app\n\n\nMore text, we can expand as many streamlit elements as we want\n\n\n\nexpander ends\n\n\n\n\n\nst.text_input\n\nsp._wrap(\"text_input\", _st_text_input)\nsp._wrap(\"text_area\", _st_text_input)\n\n\ntext = st.text_input(\"String:\", \"default text\")\ntext\n\n\n\n\n'default text'\n\n\n\ntext = st.text_area(\"Input:\", \"foo bar\")\ntext\n\n\n\n\n'foo bar'\n\n\n\n\nst.date_input\n\nsp._wrap(\"date_input\", _st_date_input)\n\n⚠️ Note the following limitation: when using this in jupyter, changing the date on your widget will not affect the date variable.\nStreamlit behavior will remain unchanged though\n\ndate = st.date_input(\"Pick a date\", value=\"2022-12-13\")\n\n\n\n\n\nassert date == datetime(2022, 12, 13).date()\n\n\n\nst.checkbox\n\nsp._wrap(\"checkbox\", _st_checkbox)\n\n\nshow_code = st.checkbox(\"Show code\")\nassert show_code\n\n\n\n\n\nshow_code = st.checkbox(\"Show code\", value=False)\nassert not show_code\n\n\n\n\n\n\n_st_radio and _st_selectbox\n\nsp._wrap(\n    \"radio\", functools.partial(_st_single_choice, jupyter_widget=widgets.RadioButtons)\n)\nsp._wrap(\n    \"selectbox\", functools.partial(_st_single_choice, jupyter_widget=widgets.Dropdown)\n)\n\n\nst.radio(\"Pick\", options=[\"foo\", \"bar\"], index=1, key=\"radio\")\n\n\n\n\n'bar'\n\n\n\nst.selectbox(\"Choose\", options=[\"foo\", \"bar\"])\n\n\n\n\n'foo'\n\n\n\n\nst.multiselect\n\nsp._wrap(\"multiselect\", _st_multiselect)\n\n\nst.multiselect(\"Multiselect: \", options=[\"python\", \"golang\", \"julia\", \"rust\"])\n\n\n\n\n()\n\n\n\nst.multiselect(\n    \"Multiselect with defaults: \",\n    options=[\"nbdev\", \"streamlit\", \"jupyter\", \"fastcore\"],\n    default=[\"jupyter\", \"streamlit\"],\n)\n\n\n\n\n('jupyter', 'streamlit')\n\n\n\n\nst.metric\n\nsp._wrap(\"metric\", _st_metric)\n\n\n# test that we don't allow invalid values for delta_color and label_visibility\ntest_fail(\n    lambda: st.metric(\n        \"Speed\", 300, 210, delta_color=\"FOOBAR\", label_visibility=\"hidden\"\n    ),\n    contains=\"delta_color\",\n)\n\ntest_fail(\n    lambda: st.metric(\n        \"Speed\", 300, 210, delta_color=\"normal\", label_visibility=\"FOOBAR\"\n    ),\n    contains=\"label_visibility\",\n)\n\n# display a metric\nst.metric(\"Speed\", 300, 210, delta_color=\"normal\", label_visibility=\"hidden\")\n\n2023-03-06 17:34:09.265 WARNING __main__: `delta_color` argument is not supported in Jupyter notebooks, but will be applied in Streamlit\n2023-03-06 17:34:09.266 WARNING __main__: `label_visibility` argument is not supported in Jupyter notebooks, but will be applied in Streamlit\n2023-03-06 17:34:09.267 WARNING __main__: plotly is not installed, falling back to default st.metric implementation\nTo use plotly, run `pip install plotly`\n\n\nst.metric widget (this will work as expected in streamlit)\n\n\n\n\nst.columns\nToDo: - [ ] add support for st.columns in jupyter\n\n# logger.warning(\"Not implemented yet\")\n\n\n\nStreamlitPatcher.MAPPING\nMapping is a dictionary that maps the streamlit method to the method we want to use instead.\nThis is used when StreamlitPatcher.jupyter() is called.\n\nsp = StreamlitPatcher()\n\n\nassert not sp.registered_methods, \"registered methods should be empty at this point\"\n\n\nsource\n\n\nStreamlitPatcher.jupyter\n\n StreamlitPatcher.jupyter ()\n\npatches streamlit methods to display content in jupyter notebooks\n\nsp.jupyter()\nsp.registered_methods\n\n{'cache',\n 'cache_data',\n 'cache_resource',\n 'caption',\n 'checkbox',\n 'code',\n 'dataframe',\n 'date_input',\n 'expander',\n 'header',\n 'json',\n 'latex',\n 'markdown',\n 'metric',\n 'multiselect',\n 'radio',\n 'selectbox',\n 'subheader',\n 'text',\n 'text_area',\n 'text_input',\n 'title',\n 'write'}",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "utils.html",
+    "href": "utils.html",
+    "title": "utils",
+    "section": "",
+    "text": "source\n\nget_output\n\n get_output (func, *args, **kwargs)\n\n\nsource\n\n\ncapture_cmd_output\n\n capture_cmd_output (cmd)\n\n\nsource\n\n\ntest_md_output\n\n test_md_output (func, expected, *args, **kwargs)\n\nToDo:\n\nadd tests",
+    "crumbs": [
+      "utils"
+    ]
+  },
+  {
+    "objectID": "readme.html#docs-links",
+    "href": "readme.html#docs-links",
+    "title": "streamlit-jupyter",
+    "section": "Docs & links",
+    "text": "Docs & links\n\nDetailed docs for this library can be found at ddobrinskiy.github.io/streamlit-jupyter\nToDos on github project\nThe rest of this README provides a quick overview of the library.",
+    "crumbs": [
+      "streamlit-jupyter"
+    ]
+  },
+  {
+    "objectID": "readme.html#install",
+    "href": "readme.html#install",
+    "title": "streamlit-jupyter",
+    "section": "Install",
+    "text": "Install\npip install streamlit_jupyter",
+    "crumbs": [
+      "streamlit-jupyter"
+    ]
+  },
+  {
+    "objectID": "readme.html#how-to-use",
+    "href": "readme.html#how-to-use",
+    "title": "streamlit-jupyter",
+    "section": "How to use",
+    "text": "How to use\nTake a look at our example notebook, streamlit version runs here\nThe main idea is for you do experiment and develop in your notebook, visually see all the pieces, and then convert the notebook to .py to be run by streamlit\nstart by importing streamlit and patching it with streamlit-jupyter:\n\nimport streamlit as st\n\nfrom streamlit_jupyter import StreamlitPatcher, tqdm\n\nStreamlitPatcher().jupyter()  # register streamlit with jupyter-compatible wrappers\n\nAnd now develop your notebook as usual, but with the ability to use Streamlit widgets and components.\nSee how it works below, and check out the example notebook",
+    "crumbs": [
+      "streamlit-jupyter"
+    ]
+  },
+  {
+    "objectID": "readme.html#currently-supported-methods",
+    "href": "readme.html#currently-supported-methods",
+    "title": "streamlit-jupyter",
+    "section": "Currently supported methods",
+    "text": "Currently supported methods\nRefer to excellent streamlit docs for more details on each method\n\n\n\n\n\n\n\n\n\nmethod\ndocstring\n\n\n\n\nst.cache_data\nImplements the public st.cache_data API: the @st.cache_data decorator, and\n\n\nst.cache_resource\nImplements the public st.cache_resource API: the @st.cache_resource decorator,\n\n\nst.cache\nLegacy caching decorator (deprecated).\n\n\nst.caption\nDisplay text in small font.\n\n\nst.checkbox\nDisplay a checkbox widget.\n\n\nst.code\nDisplay a code block with optional syntax highlighting.\n\n\nst.data_editor\nDisplay a data editor widget.\n\n\nst.dataframe\nDisplay a dataframe as an interactive table.\n\n\nst.date_input\nDisplay a date input widget.\n\n\nst.expander\nInsert a multi-element container that can be expanded/collapsed.\n\n\nst.header\nDisplay text in header formatting.\n\n\nst.json\nDisplay an object or string as a pretty-printed, interactive JSON string.\n\n\nst.latex\nDisplay mathematical expressions formatted as LaTeX.\n\n\nst.markdown\nDisplay string formatted as Markdown.\n\n\nst.metric\nDisplay a metric in big bold font, with an optional indicator of how the metric changed.\n\n\nst.multiselect\nDisplay a multiselect widget.\n\n\nst.radio\nDisplay a radio button widget.\n\n\nst.selectbox\nDisplay a select widget.\n\n\nst.subheader\nDisplay text in subheader formatting.\n\n\nst.text_area\nDisplay a multi-line text input widget.\n\n\nst.text_input\nDisplay a single-line text input widget.\n\n\nst.text\nWrite text without Markdown or HTML parsing.\n\n\nst.title\nDisplay text in title formatting.\n\n\nst.write\nDisplays arguments in the app.",
+    "crumbs": [
+      "streamlit-jupyter"
+    ]
+  },
+  {
+    "objectID": "readme.html#currently-unsupported-methods",
+    "href": "readme.html#currently-unsupported-methods",
+    "title": "streamlit-jupyter",
+    "section": "Currently unsupported methods",
+    "text": "Currently unsupported methods\nMost of the other methods are not supported yet.\nIf you need any of them, you have one of 2 options:\n\nplease open an issue or a PR\nuse them in your notebook regardless, they will still work once you convert your notebook to streamlit. You just won’t be able to preview them in jupyter.",
+    "crumbs": [
+      "streamlit-jupyter"
+    ]
+  },
+  {
+    "objectID": "readme.html#how-to-contribute",
+    "href": "readme.html#how-to-contribute",
+    "title": "streamlit-jupyter",
+    "section": "How to contribute",
+    "text": "How to contribute\nTo start with you need to create virtualenv with pipenv tool and the libraries from Pipfile:\npipenv shell \npipenv install -d \nInstall quatro, if you have Mac OS use homebrew:\nbrew install quarto\n\notherwise, check https://quarto.org/docs/download/\nThe next step is to install streamlit-jupyter from the repo\npip install -e \"[dev]\"\n\nnow you are all set, you can refer to Makefile to see examples with streamlit-jupyter. Simply run a command:\nmake all",
+    "crumbs": [
+      "streamlit-jupyter"
+    ]
+  },
+  {
+    "objectID": "readme.html#demonstration",
+    "href": "readme.html#demonstration",
+    "title": "streamlit-jupyter",
+    "section": "Demonstration",
+    "text": "Demonstration\n\n\n\n\n\n\n\n\n\n Jupyter\n Streamlit\n\n\n\n\nMarkdown and headings\n\n\n\n\nInteractive data entry\n\n\n\n\nPick and choose\n\n\n\n\nDataframes, caching and progress bars\n\n\n\n\nPlots\n\n\n\n\nMetrics",
+    "crumbs": [
+      "streamlit-jupyter"
+    ]
+  }
+]
