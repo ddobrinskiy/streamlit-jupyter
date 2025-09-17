@@ -1,36 +1,34 @@
 format:
-	pipenv run nbqa black nbs/ examples/
-	pipenv run nbqa isort nbs/ examples/
-
-lint:
-	pipenv run nbqa mypy nbs/ --ignore-missing-imports --check-untyped-defs
+	uv run nbqa black nbs/ examples/
+	uv run nbqa isort nbs/ examples/
 
 test:
-	pipenv run nbdev_test 
+	uv run nbdev_test
 
 export:
-	pipenv run nbdev_export 
+	uv run nbdev_export
 
-pipenv-setup:
-	pipenv sync --pipfile --dev
+setup:
+	uv sync --dev
+	uv run pip install -e .
 
 readme:
-	pipenv run nbdev_readme
+	uv run nbdev_readme
 
 clean:
-	pipenv run nbdev_clean
+	uv run nbdev_clean
 
 all: format export test readme clean
 
 docs:
-	pipenv run nbdev_docs
+	uv run nbdev_docs
 
 bump:
-	pipenv run nbdev_bump_version
+	uv run nbdev_bump_version
 
 pypi:
-	pipenv run nbdev_pypi
+	uv run nbdev_pypi
 
-example:
-	pipenv run streamlit run examples/example.py --server.runOnSave true
+example: setup
+	uv run streamlit run examples/example.py --server.runOnSave true
 
