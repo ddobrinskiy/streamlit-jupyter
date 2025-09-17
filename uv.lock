@@ -2847,6 +2847,23 @@ dependencies = [
     { name = "tqdm" },
 ]
 
+[package.optional-dependencies]
+dev = [
+    { name = "black" },
+    { name = "build" },
+    { name = "ipykernel" },
+    { name = "isort" },
+    { name = "mypy" },
+    { name = "nbdev" },
+    { name = "nbqa" },
+    { name = "packaging" },
+    { name = "pipenv-setup" },
+    { name = "plotly" },
+    { name = "pre-commit" },
+    { name = "twine" },
+    { name = "vistir" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "black" },
@@ -2867,14 +2884,29 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "black", marker = "extra == 'dev'" },
+    { name = "build", marker = "extra == 'dev'" },
     { name = "fastcore" },
+    { name = "ipykernel", marker = "extra == 'dev'" },
     { name = "ipywidgets", specifier = ">=8.0.0,<9.0.0" },
+    { name = "isort", marker = "extra == 'dev'" },
     { name = "jupyter" },
+    { name = "mypy", marker = "extra == 'dev'" },
+    { name = "nbdev", marker = "extra == 'dev'" },
+    { name = "nbqa", marker = "extra == 'dev'" },
+    { name = "packaging", marker = "extra == 'dev'", specifier = "~=20.0" },
+    { name = "pipenv-setup", marker = "extra == 'dev'", specifier = "==3.2.0" },
+    { name = "plotly", marker = "extra == 'dev'", specifier = ">=5.0.0" },
+    { name = "pre-commit", marker = "extra == 'dev'" },
     { name = "stqdm" },
     { name = "streamlit", specifier = ">=1.19" },
+    { name = "streamlit-jupyter", marker = "extra == 'dev'", virtual = "." },
     { name = "tabulate" },
     { name = "tqdm" },
+    { name = "twine", marker = "extra == 'dev'" },
+    { name = "vistir", marker = "extra == 'dev'", specifier = "==0.6.1" },
 ]
+provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
 dev = [
