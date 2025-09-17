@@ -135,3 +135,4 @@ _docs
 .vscode
 Pipfile.lock
 venv_*
+uv.lock
