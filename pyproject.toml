@@ -29,7 +29,6 @@ dev = [
     "packaging~=20.0",
     "build",
     "twine",
-    "streamlit-jupyter",
 ]
 
 [dependency-groups]
@@ -47,13 +46,9 @@ dev = [
     "packaging~=20.0",
     "build",
     "twine",
-    "streamlit-jupyter",
 ]
 
 [tool.uv.workspace]
 members = [
     ".",
 ]
-
-[tool.uv.sources]
-streamlit-jupyter = { workspace = true }

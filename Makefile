@@ -2,9 +2,6 @@ format:
 	uv run nbqa black nbs/ examples/
 	uv run nbqa isort nbs/ examples/
 
-lint:
-	uv run nbqa mypy nbs/ --ignore-missing-imports --check-untyped-defs
-
 test:
 	uv run nbdev_test
 
@@ -13,6 +10,7 @@ export:
 
 setup:
 	uv sync --dev
+	uv run pip install -e .
 
 readme:
 	uv run nbdev_readme
@@ -31,6 +29,6 @@ bump:
 pypi:
 	uv run nbdev_pypi
 
-example:
+example: setup
 	uv run streamlit run examples/example.py --server.runOnSave true
 
