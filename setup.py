@@ -83,7 +83,6 @@ setup(
     extras_require={
         "dev": [
             "ruff",
-            "black",
             "ipykernel",
             "mypy",
             "nbdev",

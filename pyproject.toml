@@ -17,7 +17,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "ruff",
-    "black",
     "ipykernel",
     "mypy",
     "nbdev",
@@ -31,7 +30,6 @@ dev = [
 [dependency-groups]
 dev = [
     "ruff",
-    "black",
     "ipykernel",
     "mypy",
     "nbdev",
