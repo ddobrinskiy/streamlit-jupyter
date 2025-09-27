@@ -41,7 +41,7 @@ start by importing streamlit and patching it with streamlit-jupyter:
 ``` python
 import streamlit as st
 
-from streamlit_jupyter import StreamlitPatcher, tqdm
+from streamlit_jupyter import StreamlitPatcher
 
 StreamlitPatcher().jupyter()  # register streamlit with jupyter-compatible wrappers
 ```
