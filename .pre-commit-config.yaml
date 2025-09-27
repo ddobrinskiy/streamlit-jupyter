@@ -5,17 +5,12 @@ repos:
       - id: nbdev_clean
       - id: nbdev_export
 
-  - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.5.3
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.13.2 # Ruff version.
     hooks:
-      - id: nbqa-black
-        exclude: ^(_proc/.*|examples/)
-      - id: nbqa-isort
-        exclude: ^(_proc/.*|examples/)
+      - id: ruff-check
+        types_or: [python, jupyter]
+        args: [ --fix ]
+      - id: ruff-format
+        types_or: [python, jupyter]
 
-  - repo: https://github.com/Madoshakalaka/pipenv-setup
-    rev: v3.2.0
-    hooks:
-      - id: pipenv-setup
-        args: [--dev, --pipfile]
-        additional_dependencies: ["vistir==0.6.1", ".[black]"]
