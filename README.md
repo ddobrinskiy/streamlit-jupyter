@@ -41,7 +41,7 @@ start by importing streamlit and patching it with streamlit-jupyter:
 ``` python
 import streamlit as st
 
-from streamlit_jupyter import StreamlitPatcher, tqdm
+from streamlit_jupyter import StreamlitPatcher
 
 StreamlitPatcher().jupyter()  # register streamlit with jupyter-compatible wrappers
 ```
@@ -99,15 +99,14 @@ If you need any of them, you have one of 2 options:
 
 ## How to contribute
 
-To start with you need to create virtualenv with pipenv tool and the
-libraries from Pipfile:
+To start with you need to create a virtual environment with uv and
+install the development dependencies:
 
 ``` shell
-pipenv shell 
-pipenv install -d 
+uv sync --dev
 ```
 
-Install quatro, if you have Mac OS use homebrew:
+Install quarto, if you have Mac OS use homebrew:
 
 ``` shell
 brew install quarto
@@ -115,10 +114,17 @@ brew install quarto
 
 otherwise, check https://quarto.org/docs/download/
 
-The next step is to install streamlit-jupyter from the repo
+The next step is to install streamlit-jupyter from the repo in
+development mode:
 
 ``` shell
-pip install -e "[dev]"
+uv run pip install -e .
+```
+
+or simply run:
+
+``` shell
+make setup
 ```
 
 now you are all set, you can refer to Makefile to see examples with

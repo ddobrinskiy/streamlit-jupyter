@@ -82,15 +82,11 @@ setup(
     ],
     extras_require={
         "dev": [
-            "black",
+            "ruff",
             "ipykernel",
-            "isort",
             "mypy",
             "nbdev",
-            "nbqa",
-            "pipenv-setup==3.2.0",
             "pre-commit",
-            "vistir==0.6.1",
             "packaging~=20.0",
             "build",
             "twine",

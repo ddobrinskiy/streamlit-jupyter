@@ -1,6 +1,6 @@
 format:
-	uv run nbqa black nbs/ examples/
-	uv run nbqa isort nbs/ examples/
+	uv run ruff check --fix nbs/ examples/
+	uv run ruff format nbs/ examples/
 
 test:
 	uv run nbdev_test

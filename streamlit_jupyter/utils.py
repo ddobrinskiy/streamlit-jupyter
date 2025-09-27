@@ -6,7 +6,7 @@
 __all__ = ['get_output', 'capture_cmd_output', 'test_md_output']
 
 # %% ../nbs/00_utils.ipynb 2
-from fastcore.test import test_eq, test_fail
+from fastcore.test import test_eq
 from IPython.utils.capture import capture_output
 
 # %% ../nbs/00_utils.ipynb 4
