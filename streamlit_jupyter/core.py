@@ -8,7 +8,6 @@ __all__ = ['IN_IPYTHON', 'tqdm', 'StreamlitPatcher']
 # %% ../nbs/01_core.ipynb 2
 import functools
 import json
-import logging
 import time
 import typing as tp
 from datetime import datetime
@@ -17,7 +16,7 @@ import IPython.display
 import ipywidgets as widgets
 import pandas as pd
 import streamlit as st
-from fastcore.basics import in_ipython, listify, noop, patch, patch_to
+from fastcore.basics import in_ipython, listify, noop, patch_to
 from fastcore.test import test_eq, test_fail
 from IPython.utils.capture import capture_output
 
@@ -137,7 +136,7 @@ def _st_caption(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
         if len(args) == 0:
-            raise ValueError(f"at least one positional argument is required")
+            raise ValueError("at least one positional argument is required")
         elif len(args) == 1:
             body = args[0]
 
@@ -168,10 +167,10 @@ def _st_type_check(
         elif len(args) == 0:
             if kwargs:
                 raise NotImplementedError(
-                    f"kwargs not supported yet, 'streamlit_data_science.utils._wrap_st_type_check' only accepts positional arguments"
+                    "kwargs not supported yet, 'streamlit_data_science.utils._wrap_st_type_check' only accepts positional arguments"
                 )
             else:
-                raise ValueError(f"at least one positional argument is required")
+                raise ValueError("at least one positional argument is required")
 
         if type(body) in allowed_types:
             _display(body)
@@ -212,7 +211,7 @@ def _st_text(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
         if len(args) == 0:
-            raise ValueError(f"at least one positional argument is required")
+            raise ValueError("at least one positional argument is required")
         elif len(args) == 1:
             body = args[0]
         elif len(args) >= 2:
@@ -237,7 +236,7 @@ def _st_latex(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
         if len(args) == 0:
-            raise ValueError(f"at least one positional argument is required")
+            raise ValueError("at least one positional argument is required")
         elif len(args) == 1:
             body = args[0]
         elif len(args) >= 2:
@@ -260,7 +259,7 @@ def _st_json(func_to_decorate):
     @functools.wraps(func_to_decorate)
     def wrapper(*args, **kwargs):
         if len(args) == 0:
-            raise ValueError(f"at least one positional argument is required")
+            raise ValueError("at least one positional argument is required")
         elif len(args) == 1:
             body = args[0]
             expanded = kwargs.get("expanded", True)
@@ -305,7 +304,7 @@ class _DummyExpander:
         _display(f">**expander starts**: {self.label}")
 
     def __exit__(self, *args):
-        _display(f">**expander ends**")
+        _display(">**expander ends**")
 
 
 def _st_expander(cls_to_replace: st.expander):
@@ -546,7 +545,7 @@ def _st_metric(func_to_decorate):
             msg = "plotly is not installed, falling back to default st.metric implementation\n"
             msg += "To use plotly, run `pip install plotly`"
             logger.warning(msg)
-            _display(f"`st.metric widget (this will work as expected in streamlit)`")
+            _display("`st.metric widget (this will work as expected in streamlit)`")
         except Exception as e:
             raise e
 

@@ -19,7 +19,6 @@ ignore = [
 known-first-party = ["streamlit_jupyter"]
 
 [format]
-quote-style = "single"
+quote-style = "double"
 indent-style = "space"
-skip-magic-trailing-comma = false
 line-ending = "auto"

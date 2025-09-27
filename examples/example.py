@@ -8,7 +8,7 @@ from datetime import datetime
 
 import streamlit as st
 
-from streamlit_jupyter import StreamlitPatcher, tqdm
+from streamlit_jupyter import tqdm
 
 # %% 99_example.ipynb 4
 st.title("Example")
